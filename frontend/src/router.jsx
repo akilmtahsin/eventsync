@@ -12,11 +12,31 @@ import Userlayout from "./assets/components/userlayout";
 import Organizerlayout from "./assets/components/organizerlayout";
 import Home from "./views/home";
 
+
 const router = createBrowserRouter([
   {
     path:'/',
     element: <Navigate to= "/home"/>
   },
+
+  {
+    path:'/',
+    element: <Guestlayout/>,
+    children:[
+      
+        {
+          path: '/login',
+          element: <Login/>
+        },
+        
+        {
+          path: '/signup',
+          element: <Signup/>
+        },
+      
+    ]
+  },
+
   {
     path:'/',
     element: <Admin/>,
@@ -77,30 +97,13 @@ const router = createBrowserRouter([
     ]
   },
 
-  {
-    path:'/',
-    element: <Guestlayout/>,
-    children:[
-      
-        {
-          path: '/login',
-          element: <Login/>
-        },
-        
-        {
-          path: '/signup',
-          element: <Signup/>
-        },
-      
-    ]
-  },
-
   
   
-  {
-    path: '*',
-    element: <Notfound/>
-  }
+  
+  // {
+  //   path: '*',
+  //   element: <Notfound/>
+  // }
 
 
   
