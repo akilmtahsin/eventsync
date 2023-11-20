@@ -14,10 +14,10 @@ import Home from "./views/home";
 
 
 const router = createBrowserRouter([
-  {
-    path:'/',
-    element: <Navigate to= "/home"/>
-  },
+  // {
+  //   path:'/',
+  //   element: <Navigate to= "/home"/>
+  // },
 
   {
     path:'/',
@@ -38,7 +38,7 @@ const router = createBrowserRouter([
   },
 
   {
-    path:'/',
+    path:'/admin',
     element: <Admin/>,
     children:[
       {
@@ -46,64 +46,37 @@ const router = createBrowserRouter([
         element: <Dashboard/>
       },
       {
-        path: 'admin/users',
+        path: 'admin/view-users',
         element: <Users/>
       },
       {
-        path: 'admin/organizers',
+        path: 'admin/view-organizers',
         element: <Organizers/>
       },
       {
-        path: 'admin/events',
+        path: 'admin/view-events',
         element: <Events/>
       }
     ]
   },
 
   {
-    path:'/',
+    path:'/user',
     element: <Userlayout/>,
-    children:[
-      
-        {
-          path: 'user/home',
-          element: <Home/>
-          
-        },
-        
-        {
-          path: '/',
-          
-        },
-      
-    ]
   },
 
   {
-    path:'/',
+    path:'/organizer',
     element: <Organizerlayout/>,
-    children:[
-      
-        {
-          path: '/',
-          
-        },
-        
-        {
-          path: '/',
-          
-        },
-      
-    ]
   },
 
   
   
   
-  // {
-  //   path: '*',
-  //   element: <Notfound/>
-  // }
+  {
+    path: '*',
+    element: <Notfound/>
+  }
 
 
   
