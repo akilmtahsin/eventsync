@@ -1,77 +1,39 @@
-import {Navigate, createBrowserRouter} from "react-router-dom";
-import Login from "./views/login";
-import Signup from "./views/signup";
-import Users from "./views/users";
-import Notfound from "./views/notfound";
-import Admin from "./assets/components/admin";
-import Dashboard from "./views/dashboard";
-import Guestlayout from "./assets/components/guestlayout";
-import Organizers from "./views/organizers";
-import Events from "./views/events";
-import Userlayout from "./assets/components/userlayout";
-import Organizerlayout from "./assets/components/organizerlayout";
+import {createBrowserRouter} from "react-router-dom";
+import Login from "./views/Login";
+import Signup from "./views/SignUp";
+import Notfound from "./views/NotFound";
 import Home from "./views/home";
-
+import DefaultLayout from "./assets/components/DefaultLayout";
+import AdminLayout from "./assets/components/AdminLayout";
+import Events from "./views/Events";
 
 const router = createBrowserRouter([
-  // {
-  //   path:'/',
-  //   element: <Navigate to= "/home"/>
-  // },
+
 
   {
     path:'/',
-    element: <Guestlayout/>,
-    children:[
-      
-        {
-          path: '/login',
-          element: <Login/>
-        },
-        
-        {
-          path: '/signup',
-          element: <Signup/>
-        },
-      
-    ]
+    element: <Home/>,
+  },
+
+  {
+    path: '/events',
+    element: <Events/>
   },
 
   {
     path:'/admin',
-    element: <Admin/>,
-    children:[
-      {
-        path: 'admin/dashboard',
-        element: <Dashboard/>
-      },
-      {
-        path: 'admin/view-users',
-        element: <Users/>
-      },
-      {
-        path: 'admin/view-organizers',
-        element: <Organizers/>
-      },
-      {
-        path: 'admin/view-events',
-        element: <Events/>
-      }
-    ]
+    element: <AdminLayout/>,
   },
 
   {
-    path:'/user',
-    element: <Userlayout/>,
+    path:'/login',
+    element: <Login/>,
   },
 
   {
-    path:'/organizer',
-    element: <Organizerlayout/>,
+    path:'/signup',
+    element: <Signup/>,
   },
-
-  
-  
   
   {
     path: '*',

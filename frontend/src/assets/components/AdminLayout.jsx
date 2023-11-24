@@ -1,10 +1,11 @@
 
-export default function GuestLayout(){
+
+export default function AdminLayout(){
  
   return(
     <div>
       <h1 className="text-center bg-gray-100 text-lg">
-        Hi Random User
+        Admin Layout
       </h1>
     </div>
   )
