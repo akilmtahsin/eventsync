@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Switch } from "@headlessui/react";
 
 export default function SignUp() {
@@ -10,7 +10,7 @@ export default function SignUp() {
 
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-      <h2 className="mt-10 text-center text-xl font-bold leading-9 tracking-tight text-gray-900">Who are you? </h2>
+      <h2 className="mt-10 text-center text-xl font-bold leading-9 tracking-tight text-gray-900">Select User Type</h2>
       <div className="flex justify-center items-center mt-4">
         <label
           className={`mr-4 cursor-pointer ${
@@ -57,7 +57,9 @@ export default function SignUp() {
               htmlFor="name"
               className="block text-sm font-medium leading-6 text-gray-900"
             >
-              Name
+              {userType === "organizer"
+            ? "Organizer Name"
+            : "Name"}
             </label>
             <div className="mt-2">
               <input
@@ -75,7 +77,9 @@ export default function SignUp() {
               htmlFor="email"
               className="block text-sm font-medium leading-6 text-gray-900"
             >
-              Email address
+              {userType === "organizer"
+            ? "Organization Email"
+            : "Email"}
             </label>
             <div className="mt-2">
               <input
