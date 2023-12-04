@@ -4,7 +4,7 @@ import { Button } from '@material-tailwind/react'
 
 export default function EventsSection() {
   return (
-    <div className='flex flex-col items-center max-w-[900px] mx-auto h-screen'>
+    <div className='flex flex-col items-center mt-10 max-w-[900px] mx-auto h-screen'>
       <h2 className='self-start font-display text-4xl font-medium tracking-tighter text-blue-600 sm:text-5xl'>Upcoming Events</h2>
       <div className='flex flex-row gap-y-6 pt-7'>
         <EventCard/>

@@ -7,6 +7,7 @@ import DefaultLayout from "./assets/components/DefaultLayout";
 import AdminLayout from "./assets/components/AdminLayout";
 import Events from "./views/Events";
 import Speakers from "./views/Speakers";
+import EventDetails from "./assets/components/EventDetails";
 
 const router = createBrowserRouter([
 
@@ -18,8 +19,16 @@ const router = createBrowserRouter([
 
   {
     path: '/events',
-    element: <Events/>
+    element: <Events/>,
+  
   },
+
+  {
+    path: '/events/details',
+    element: <EventDetails/>,
+  
+  },
+
 
   {
     path:'/admin',

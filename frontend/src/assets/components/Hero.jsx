@@ -2,18 +2,16 @@ import { Button } from "@material-tailwind/react";
 export default function Hero() {
   return (
     <>
-      <div className=" font-sans max-w-[900px] mt-[-85px] w-full h-screen mx-auto flex flex-col justify-center text-center">
+      <div className=" font-sans max-w-[900px] mt-0 w-full mx-auto flex flex-col justify-center text-center">
         <div>
-          <div className="mx-auto flex items-center gap-4 px-4 justify-center">
-            <p className=" text-blue-500 font-mono font-bold p-4 mt-7 mb-3 text-center">
-              <time dateTime="2024-01-04">04</time> -
-              <time dateTime="2024-01-06">06 of January, 2024</time>
-            </p>
-
-            <p className=" text-blue-500 font-mono font-bold p-4 mt-7 mb-3 text-center">
-              Seminar
-            </p>
-          </div>
+          {/* <div className="mx-auto flex items-center gap-4 px-4 justify-center">
+            
+          </div> */}
+          <img
+      className="h-[250px] w-full rounded-lg object-cover object-center"
+      src="https://images.unsplash.com/photo-1682407186023-12c70a4a35e0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2832&q=80"
+      alt="nature image"
+    />
           <h1 className="text-7xl font-bold text-font-display tracking-tighter text-blue-600 text-left">
             Conference on Importance of Blockchain
           </h1>
@@ -65,6 +63,7 @@ export default function Hero() {
               Get Your Tickets
             </a>
           </div>
+         
         </div>
       </div>
     </>
