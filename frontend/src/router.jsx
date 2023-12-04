@@ -6,6 +6,7 @@ import Home from "./views/home";
 import DefaultLayout from "./assets/components/DefaultLayout";
 import AdminLayout from "./assets/components/AdminLayout";
 import Events from "./views/Events";
+import Speakers from "./views/Speakers";
 
 const router = createBrowserRouter([
 
@@ -38,6 +39,11 @@ const router = createBrowserRouter([
   {
     path: '/events',
     element: <Events/>
+  },
+
+  {
+    path: '/speakers',
+    element: <Speakers/>
   },
   
   {

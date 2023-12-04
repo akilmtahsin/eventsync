@@ -1,13 +1,17 @@
-import { EventCard } from "../assets/components/EventCard";
+
+import EventsSection from "../assets/components/EventsSection";
+import Footer from "../assets/components/Footer";
 import Hero from "../assets/components/Hero";
-import Navbar from "../assets/components/Navbar";
+import NavBar from "../assets/components/Navbar";
+
 
 export default function home() {
   return (
     <>
-    <Navbar/>
+    <NavBar/>
     <Hero/>
-    <EventCard/>
+    <EventsSection/>
+    <Footer/>
     </>
   );
 }
