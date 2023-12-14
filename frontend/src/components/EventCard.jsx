@@ -6,6 +6,7 @@ import {
   Typography,
   Button
 } from "@material-tailwind/react";
+import { NavLink } from "react-router-dom";
  
 export function EventCard() {
   return (
@@ -31,7 +32,7 @@ export function EventCard() {
       </CardBody>
       <CardFooter className="flex items-center justify-between">
       <Typography className="font-normal">January 10</Typography>
-      <a href="#" className="inline-block align">
+      <NavLink to='/events/details' className="inline-block align">
           <Button size="sm" variant="text" className="flex items-center gap-2">
             Learn More
             <svg
@@ -49,7 +50,7 @@ export function EventCard() {
               />
             </svg>
           </Button>
-        </a>
+        </NavLink>
       </CardFooter>
     </Card>
   );

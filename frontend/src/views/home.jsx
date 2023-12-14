@@ -1,17 +1,15 @@
 
-import EventsSection from "../assets/components/EventsSection";
-import Footer from "../assets/components/Footer";
-import Hero from "../assets/components/Hero";
-import NavBar from "../assets/components/Navbar";
+import EventsSection from "../components/EventsSection";
+
+import Hero from "../components/Hero";
 
 
-export default function home() {
+
+export default function Home() {
   return (
-    <>
-    <NavBar/>
+    <div className="">
     <Hero/>
     <EventsSection/>
-    <Footer/>
-    </>
+    </div>
   );
 }

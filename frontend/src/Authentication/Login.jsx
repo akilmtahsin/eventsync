@@ -1,4 +1,5 @@
-
+import toast from "react-hot-toast"
+import { Link } from "react-router-dom";
 export default function Login() {
   return (
     <>
@@ -38,7 +39,10 @@ export default function Login() {
                   Password
                 </label>
                 <div className="text-sm">
-                  <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
+                  <a href="" className="font-semibold text-indigo-600 hover:text-indigo-500"  onClick={(event) => {
+    event.preventDefault();
+    toast.error("Feature not added.");
+  }}>
                     Forgot password?
                   </a>
                 </div>
@@ -60,10 +64,16 @@ export default function Login() {
                 type="submit"
                 className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
-                Sign in
+                Login
               </button>
             </div>
           </form>
+        </div>
+        <div className="flex flex-row items-center justify-center gap-2">
+          <p>Don&apos;t have an account?</p>
+          <Link to='/auth/signup' className="p-2 hover:text-blue-900 hover:font-bold">
+              Signup
+            </Link>
         </div>
       </div>
     </>

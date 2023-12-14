@@ -2,7 +2,7 @@ import { Typography } from "@material-tailwind/react";
  
 export default function Footer() {
   return (
-    <footer className="w-full p-8 bg-light-blue-100">
+    <footer className="w-full p-8 bg-light-blue-100 mt-4">
       <div className="flex flex-row flex-wrap items-center gap-y-6 gap-x-12 text-center justify-between">
         <img src="./EventSync.png" alt="logo" className=" w-[100px]" />
         <ul className="flex flex-wrap items-center gap-y-2 gap-x-8">
