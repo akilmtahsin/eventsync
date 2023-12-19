@@ -6,11 +6,14 @@
         "build": "vite build"
     },
     "devDependencies": {
-        "axios": "^1.1.2",
+        "axios": "^1.6.2",
+        "clean-webpack-plugin": "^4.0.0",
         "laravel-vite-plugin": "^0.8.0",
         "vite": "^4.0.0"
     },
     "dependencies": {
-        "@headlessui/react": "^1.7.17"
+        "@headlessui/react": "^1.7.17",
+        "formik": "^2.4.5",
+        "react-hot-toast": "^2.4.1"
     }
 }

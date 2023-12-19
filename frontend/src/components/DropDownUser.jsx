@@ -1,17 +1,24 @@
 import { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate} from 'react-router-dom';
 import { Avatar } from "@material-tailwind/react";
  
-
-
-
-
-
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
+  const navigate = useNavigate();
+
   const trigger = useRef(null);
   const dropdown = useRef(null);
+
+  const handleLogout = () => {
+    console.log('Logging out...');
+  
+    // Clear the user's authentication token using AuthService
+    localStorage.removeItem('jwt-token');
+  
+    console.log('Logged out successfully.');
+    navigate('/');
+  };
 
   // close on click outside
   useEffect(() => {
@@ -40,7 +47,7 @@ const DropdownUser = () => {
   });
 
   return (
-    <div className="relative">
+    <div className="relative p-2 rounded-lg hover:bg-blue-100/[.5] ">
       <Link
         ref={trigger}
         onClick={() => setDropdownOpen(!dropdownOpen)}
@@ -48,14 +55,14 @@ const DropdownUser = () => {
         to="#"
       >
         <span className="hidden text-right lg:block">
-          <span className="block text-sm font-medium text-black dark:text-white">
+          <span className="block font-medium text-black dark:text-white text-lg">
             Admin
           </span>
         
         </span>
 
         <span className="h-12 w-12 rounded-full">
-        <Avatar src="https://docs.material-tailwind.com/img/face-2.jpg" alt="avatar" />;
+        <Avatar src="https://docs.material-tailwind.com/img/face-2.jpg" alt="avatar" />
         </span>
 
         <svg
@@ -90,7 +97,7 @@ const DropdownUser = () => {
           <li>
             <Link
               to="/profile"
-              className="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+              className="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base my-2"
             >
               <svg
                 className="fill-current"
@@ -115,7 +122,7 @@ const DropdownUser = () => {
           
          
         </ul>
-        <button className="flex items-center gap-3.5 py-4 px-6 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
+        <button onClick={handleLogout} className="flex items-center gap-3.5 py-4 px-6 text-base font-medium duration-300 ease-in-out hover:text-primary hover:bg-red-700/60 bg-red-700 text-white">
           <svg
             className="fill-current"
             width="22"
@@ -136,7 +143,7 @@ const DropdownUser = () => {
           Log Out
         </button>
       </div>
-      {/* <!-- Dropdown End --> */}
+     
     </div>
   );
 };
