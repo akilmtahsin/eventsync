@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate} from 'react-router-dom';
 import { Avatar } from "@material-tailwind/react";
+import { cookies } from '../../config/cookies';
  
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -14,10 +15,12 @@ const DropdownUser = () => {
     console.log('Logging out...');
   
     // Clear the user's authentication token using AuthService
-    localStorage.removeItem('jwt-token');
+    cookies.remove('user_token');
   
     console.log('Logged out successfully.');
+    window.location.reload(true)
     navigate('/');
+
   };
 
   // close on click outside

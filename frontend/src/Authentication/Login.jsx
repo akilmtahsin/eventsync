@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast"
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
-
+import { cookies } from "../../config/cookies";
+// const BASE_URL = import.meta.env.BASE_URL;
 
 
 
@@ -17,17 +17,38 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:8000/api/auth/login', {
-        email,
+      const response = await fetch(`http://localhost:8000/api/user/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          email,
         password,
+        })
       });
-      
-      const {data, status} = response
-      if(status == 200){
-        const token = data.access_token;
-        localStorage.setItem('jwt-token', token);
+
+      if (response.ok){
+        const data = await response.json();
+        cookies.set("user_token", data.token);
+        toast.success('Successfully Logged in');
         navigate("/")
+      }else {
+        if (response.status === 404) {
+          const errorData = await response.json();
+          toast.error(errorData.message); // Assuming the error message is in the "message" field
+        } else if (response.status === 400) {
+          const errorData = await response.json();
+          toast.error(errorData.message);
+
+        }
+        else  {
+          
+          console.error('Login failed:', response.status);
+          toast.error('Login failed');
+        }
       }
+      
     } catch (error) {
       // Handle login failure
       console.error('Login failed:', error);

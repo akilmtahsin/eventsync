@@ -1,4 +1,3 @@
-const { v4: uuidv4 } = require("uuid");
 const Speaker = require("../model/speaker.model");
 
 const getAllSpeaker = async (req, res) => {

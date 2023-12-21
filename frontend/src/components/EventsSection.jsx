@@ -13,7 +13,7 @@ export default function EventsSection() {
         <EventCard />
       </div>
       <NavLink
-        to="/events/details"
+        to="/events"
         className="w-[120px] inline-flex justify-between rounded-full text-blue-500 px-4 py-2 text-base font-semibold border-[1px] border-blue-500 hover:text-white hover:bg-blue-500 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 active:text-white/70"
       >
         View All

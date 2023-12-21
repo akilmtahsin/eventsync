@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { Switch } from '@headlessui/react';
-import { Link } from 'react-router-dom';
-import axiosClient from '../Axios.js';
-import { useStateContext } from '../contexts/StateContext.jsx';
+import { Link, useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
+
 
 export default function SignUp() {
+  const navigate = useNavigate();
   const [userType, setUserType] = useState('user');
   const [role, setRole] = useState('user');
   const toggleUserType = () => {
@@ -13,33 +14,50 @@ export default function SignUp() {
   };
 
   // const { setCurrentUser, setUserToken } = useStateContext();
-  const [fullName, setFullname] = useState('');
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState({ __html: '' });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError({ __html: '' });
-
-    axiosClient
-      .post('/signup', {
-        name: fullName,
-        email,
-        password,
-        role,
-      })
-      .then(({ data }) => {
-        console.log(data);
-      })
-      .catch((error) => {
-        if (error.response) {
-          const finalErrors = Object.values(error.response.data.errors).reduce((accum, next) => [...accum, ...next], [])
-          console.log(finalErrors)
-          setError({__html: finalErrors.join('<br>')})
-        }
-        console.error(error)
+  
+    try {
+      const response = await fetch(`http://localhost:8000/api/user/signup`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          role,
+          email, 
+          password,
+          username,
+        }),
       });
+  
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+        navigate('/auth/login');
+      } else {
+        if (response.status === 400) {
+          const errorData = await response.json();
+          toast.error(errorData.message); // Assuming the error message is in the "message" field
+        } else {
+          // Handle other error cases
+          console.error('Registration failed:', response.status);
+          toast.error('Registration failed. Please try again later.');
+        }
+      }
+      
+      
+    } catch (error) {
+      // Handle network or unexpected errors
+      console.error('Registration failed:', error);
+      toast.error('Registration failed. Please try again later.');
+    }
   };
 
   return (
@@ -127,9 +145,9 @@ export default function SignUp() {
                   type="text"
                   placeholder="Enter your Full Name"
                   required
-                  value={fullName}
+                  value={username}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  onChange={(e) => setFullname(e.target.value)}
+                  onChange={(e) => setUsername(e.target.value)}
                 />
               </div>
             </div>

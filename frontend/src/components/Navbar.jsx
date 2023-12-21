@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import DropdownUser from './DropDownUser';
+import { cookies } from '../../config/cookies';
 
 const NavBar = () => {
   
@@ -9,7 +10,7 @@ const NavBar = () => {
  
   useEffect(() => {
     // Check if the user is logged in 
-    const token = localStorage.getItem('jwt-token');
+    const token = cookies.get('user_token');
     if (token) {
       setLoggedIn(true);
     } else {
