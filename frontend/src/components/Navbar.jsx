@@ -18,6 +18,8 @@ const NavBar = () => {
     }
   }, []); 
 
+   
+
   return (
     <div className="sticky top-0 z-[1000] font-display flex justify-between items-center h-full w-screen max-w-full mx-auto px-4 py-2 backdrop-blur-md">
       <Link to="/">

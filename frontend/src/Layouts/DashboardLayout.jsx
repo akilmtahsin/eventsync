@@ -2,7 +2,7 @@
 import Sidebar from '../components/Sidebar';
 import { Outlet } from 'react-router-dom';
 import DashboardHeader from '../components/DashboardHeader';
-const AdminLayout = () => {
+const DashboardLayout = () => {
   
 
   return (
@@ -28,4 +28,4 @@ const AdminLayout = () => {
   );
 };
 
-export default AdminLayout;
+export default DashboardLayout;

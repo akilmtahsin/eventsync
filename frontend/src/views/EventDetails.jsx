@@ -1,6 +1,6 @@
 import { Chip, Dialog, DialogHeader, DialogFooter, DialogBody,Avatar, Button } from "@material-tailwind/react";
 import { PricingCard } from "../components/Pricing";
-import { SpeakerList } from "../components/SpeakerList";
+import { SpeakerList } from "../components/Tables/SpeakerList";
 import { useState } from "react";
 
 export default function EventDetails() {
