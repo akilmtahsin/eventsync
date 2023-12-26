@@ -1,9 +1,19 @@
-import { useState } from "react";
+import React, { useState } from 'react';
+import {
+  Button,
+  Dialog,
+  DialogHeader,
+  DialogBody,
+  DialogFooter,
+} from '@material-tailwind/react';
 
-export default function EventCreationForm() {
+export function EventCreationDialog() {
   const [speakers, setSpeakers] = useState([{ name: '', designation: '' }]);
+  const [open, setOpen] = React.useState(false);
   const [paymentStatus, setPaymentStatus] = useState('');
   const [paymentAmount, setPaymentAmount] = useState('');
+
+  const handleOpen = () => setOpen(!open);
 
   const handlePaymentStatusChange = (value) => {
     setPaymentStatus(value);
@@ -25,22 +35,39 @@ export default function EventCreationForm() {
     // Perform form submission logic here
 
     // Reset the form state if needed
-    
+    setOpen(false);
   };
+
   return (
-    
     <>
-      <div className="bg-white flex flex-col shadow-lg p-10">
-        <h1 className="font-display font-medium tracking-tighter text-blue-600 text-3xl p-10">
-          Create New Event
-        </h1>
-      
-      <div className="flex flex-col justify-between">
-      <form action="POST" onSubmit={handleSubmit}>
-            <div className="p-3">
-              <div className="mb-3 flex flex-col gap-6">
+      <Button
+        onClick={handleOpen}
+        className=" h-16 text-lg bg-green-800 hover:opacity-90 flex items-center -z-4 "
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth="2.5"
+          stroke="currentColor"
+          className="w-5 h-5 mr-3"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M12 4.5v15m7.5-7.5h-15"
+          />
+        </svg>
+        Add New Event
+      </Button>
+      <Dialog size="xxl" open={open} handler={handleOpen}>
+        <DialogHeader>Add Events</DialogHeader>
+        <DialogBody className="h-[700px] overflow-y-scroll">
+          <form action="POST" onSubmit={handleSubmit}>
+            <div className="p-6.5">
+              <div className="mb-4.5 flex flex-col gap-6">
                 <div className="w-full">
-                  <label className="mb-2 block text-black dark:text-white">
+                  <label className="mb-2.5 block text-black dark:text-white">
                     Event Name
                   </label>
                   <input
@@ -52,10 +79,10 @@ export default function EventCreationForm() {
                 </div>
               </div>
             </div>
-            <div className="p-3">
-              <div className="mb-3 flex flex-col gap-6">
+            <div className="p-6.5">
+              <div className="mb-4.5 flex flex-col gap-6">
                 <div className="w-full">
-                  <label className="mb-2 block text-black dark:text-white">
+                  <label className="mb-2.5 block text-black dark:text-white">
                     Event Details
                   </label>
                   <input
@@ -66,10 +93,10 @@ export default function EventCreationForm() {
                 </div>
               </div>
             </div>
-            <div className="p-3">
-              <div className="mb-3 flex flex-col gap-6">
+            <div className="p-6.5">
+              <div className="mb-4.5 flex flex-col gap-6">
                 <div className="w-full">
-                  <label className="mb-2 block text-black dark:text-white">
+                  <label className="mb-2.5 block text-black dark:text-white">
                     Event Type
                   </label>
                   <select required className="w-full rounded border-[1.5px] border-solid bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-red-600 disabled:cursor-default disabled:bg-white">
@@ -81,10 +108,10 @@ export default function EventCreationForm() {
                 </div>
               </div>
             </div>
-            <div className="p-3">
-              <div className="mb-3 flex flex-col gap-6">
+            <div className="p-6.5">
+              <div className="mb-4.5 flex flex-col gap-6">
                 <div className="w-full">
-                  <label className="mb-2 block text-black dark:text-white">
+                  <label className="mb-2.5 block text-black dark:text-white">
                     Paid or Unpaid
                   </label>
                   <select
@@ -99,7 +126,7 @@ export default function EventCreationForm() {
                 </div>
                 {paymentStatus === 'paid' && (
                   <div className="w-full">
-                    <label className="mb-2 block text-black dark:text-white">
+                    <label className="mb-2.5 block text-black dark:text-white">
                       Payment Amount
                     </label>
                     <input
@@ -115,10 +142,10 @@ export default function EventCreationForm() {
               </div>
             </div>
 
-            <div className="p-3">
-              <div className="mb-3 flex flex-col gap-6">
+            <div className="p-6.5">
+              <div className="mb-4.5 flex flex-col gap-6">
                 <div className="w-full">
-                  <label className="mb-2 block text-black dark:text-white">
+                  <label className="mb-2.5 block text-black dark:text-white">
                     Event Venue
                   </label>
                   <input
@@ -129,10 +156,10 @@ export default function EventCreationForm() {
                 </div>
               </div>
             </div>
-            <div className="p-3">
-              <div className="mb-3 flex flex-col gap-6">
+            <div className="p-6.5">
+              <div className="mb-4.5 flex flex-col gap-6">
                 <div className="w-full">
-                  <label className="mb-2 block text-black dark:text-white">
+                  <label className="mb-2.5 block text-black dark:text-white">
                     Event Banner
                   </label>
                   <input
@@ -143,72 +170,68 @@ export default function EventCreationForm() {
                 </div>
               </div>
             </div>
-            <div className="border-2 border-blue-600 p-3 ">
-              <h4 className="mb-3 p-3 font-bold text-xl text-blue-600">Speaker Section</h4>
-              <div className="p-3">
-                <div className="mb-3 flex flex-col gap-6">
-                  {speakers.map((speaker, index) => (
-                    <div key={index} className="w-full">
-                      <div className="mb-3">
-                        <label className="mb-2 block text-black dark:text-white">
-                          Speaker {index + 1} Name
-                        </label>
-                        <input
-                          type="text"
-                          placeholder={`Speaker ${index + 1} Name`}
-                          required
-                          className="w-full rounded border-[1.5px] border-solid bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-red-600 disabled:cursor-default disabled:bg-white"
-                          value={speaker.name}
-                          onChange={(e) =>
-                            handleSpeakerChange(index, 'name', e.target.value)
-                          }
-                        />
-                      </div>
-                      <div className="mb-3">
-                        <label className="mb-2 block text-black dark:text-white">
-                          Speaker {index + 1} Designation
-                        </label>
-                        <input
-                          type="text"
-                          placeholder={`Speaker ${index + 1} Designation`}
-                          required
-                          className="w-full rounded border-[1.5px] border-solid bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-red-600 disabled:cursor-default disabled:bg-white"
-                          value={speaker.designation}
-                          onChange={(e) =>
-                            handleSpeakerChange(
-                              index,
-                              'designation',
-                              e.target.value
-                            )
-                          }
-                        />
-                      </div>
-                    </div>
-                  ))}
-            </div>
+            <div className="p-6.5">
+              <div className="mb-4.5 flex flex-col gap-6">
+                {speakers.map((speaker, index) => (
+                  <div key={index} className="w-full">
+                    <label className="mb-2.5 block text-black dark:text-white">
+                      Speaker {index + 1} Name
+                    </label>
+                    <input
+                      type="text"
+                      placeholder={`Speaker ${index + 1} Name`}
+                      required
+                      className="w-full rounded border-[1.5px] border-solid bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-red-600 disabled:cursor-default disabled:bg-white"
+                      value={speaker.name}
+                      onChange={(e) =>
+                        handleSpeakerChange(index, 'name', e.target.value)
+                      }
+                    />
+                    <label className="mb-2.5 block text-black dark:text-white">
+                      Speaker {index + 1} Designation
+                    </label>
+                    <input
+                      type="text"
+                      placeholder={`Speaker ${index + 1} Designation`}
+                      required
+                      className="w-full rounded border-[1.5px] border-solid bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-red-600 disabled:cursor-default disabled:bg-white"
+                      value={speaker.designation}
+                      onChange={(e) =>
+                        handleSpeakerChange(
+                          index,
+                          'designation',
+                          e.target.value
+                        )
+                      }
+                    />
+                  </div>
+                ))}
               </div>
             </div>
 
-            <div className="p-6 flex justify-between">
+            <div className="p-6.5">
               <button
                 type="button"
-                className="bg-blue-600 text-white py-2 px-4 rounded mt-4"
+                className="bg-green-400 text-white py-2 px-4 rounded mt-4"
                 onClick={handleAddSpeaker}
               >
                 Add More Speakers
               </button>
-              <button
-                type="submit"
-                className="bg-green-400 text-white py-2 px-4 rounded mt-4"
-              
-              >
-                Submit
-              </button>
               
             </div>
           </form>
-      </div>
-      </div>
+        </DialogBody>
+        <DialogFooter>
+          <div className="flex justify-between w-56 ">
+            <Button variant="gradient" color="red" onClick={handleOpen}>
+              <span>Cancel</span>
+            </Button>
+            <Button type="submit" variant="gradient" color="green" onClick={handleOpen}>
+              <span>Confirm</span>
+            </Button>
+          </div>
+        </DialogFooter>
+      </Dialog>
     </>
   );
 }

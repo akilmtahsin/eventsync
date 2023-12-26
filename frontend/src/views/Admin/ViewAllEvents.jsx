@@ -1,6 +1,6 @@
 import React from 'react'
 
-const ViewAllSpeakers = () => {
+const ViewAllEvents = () => {
   return (
     <div>
       
@@ -8,4 +8,4 @@ const ViewAllSpeakers = () => {
   )
 }
 
-export default ViewAllSpeakers
+export default ViewAllEvents

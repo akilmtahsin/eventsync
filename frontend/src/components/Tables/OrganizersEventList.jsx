@@ -29,7 +29,7 @@ export function OrganizerEventList() {
     <div className="flex flex-col">
       
       <Dialog open={open} handler={handleEventEdit}>
-        <DialogHeader>Edit Edit Details</DialogHeader>
+        <DialogHeader>Edit Details</DialogHeader>
         <DialogBody className="h-[400px] overflow-y-scroll">
           <form action="#">
             <div className="p-6.5">

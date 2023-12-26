@@ -81,12 +81,21 @@ const Sidebar = () => {
               {/* -----------------------admin------------------------------ */}
               <li>
                 <NavLink
-                  to="/dashboard/organizer/dashboard"
+                  to="/dashboard/organizer/"
                   className="group relative flex items-center gap-2.5 rounded-lg py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-blue-800/30 "
                 >
                   Organizer Dashboard
                 </NavLink>
               </li>
+              <li>
+                <NavLink
+                  to="/dashboard/organizer/events/create"
+                  className="group relative flex items-center gap-2.5 rounded-lg py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-blue-800/30 "
+                >
+                 Create New Event
+                </NavLink>
+              </li>
+
               <li>
                 <NavLink
                   to="/dashboard/organizer/events"
@@ -95,6 +104,7 @@ const Sidebar = () => {
                   My Events
                 </NavLink>
               </li>
+
 
               <li>
                 <NavLink
