@@ -54,13 +54,27 @@ const Login = async (req, res) => {
   }
 };
 
-const Profile = async (req, res) => {
+const viewProfile = async (req, res) => {
+
   try {
-    const user = await User.findOne({ _id: req.params.id });
+    const user = await User.findOne({ _id: req.userId });
+    
     res.status(200).json(user);
   } catch (error) {
     res.status(500).send(error.message);
   }
 };
 
-module.exports = { Signup, Login, Profile };
+const updateProfile = async (req, res) => {
+  try {
+    const user = await User.findOne({ _id: req.userId });
+    user.name = req.body.name;
+    user.email = req.body.email;
+    await speaker.save();
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+};
+
+module.exports = { Signup, Login, viewProfile, updateProfile };
