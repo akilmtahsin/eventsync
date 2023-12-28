@@ -20,15 +20,17 @@ import UserProfile from './views/User/UserProfile';
 import UserPayments from './views/User/Payments';
 import EnrolledEvent from './views/User/EnrolledEvent';
 import CreatedSpeakers from './views/Organizer/CreatedSpeakers';
-import CreatedEvents from './views/Organizer/CreatedEvents';
+import CreatedEvents from './views/Organizer/PendingEvents';
 import AdminDashboard from './views/Admin/AdminDashboard';
 import OrganizerDashboard from './views/Organizer/OrganizerDashboard';
-import EventCreationForm from './components/Forms/EventRegistration';
+import EventCreationForm from './views/Organizer/EventRegistration';
 import ViewAllUser from './views/Admin/ViewAllUser';
 import ViewAllOrganizers from './views/Admin/ViewAllOrganizers';
 import ViewAllSpeakers from './views/Admin/ViewAllSpeakers';
 import ViewAllPayments from './views/Admin/ViewAllPayments';
-import ViewAllEvents from './views/Admin/ViewAllEvents';
+import ViewAllEvents from './views/Admin/ViewAllApproved';
+import ViewAllApproval from './views/Admin/ViewAllPending';
+import ViewApproved from './views/Admin/ViewAllApproved';
 // import DashboardRoute from './Routes/DashboardRoute';
 
 // const DashboardRoute = ({ element, userRole, allowedRoles }) => {
@@ -131,10 +133,8 @@ function App() {
           <Route path="/dashboard/organizers" element={<ViewAllOrganizers   />} />
           <Route path="/dashboard/speakers" element={<ViewAllSpeakers  />} />
           <Route path="/dashboard/payments" element={<ViewAllPayments  />} />
-          <Route path="/dashboard/events" element={<ViewAllEvents  />} />
-          <Route path="/dashboard/organizers" element={<UserProfile />} />
-          <Route path="/dashboard/speakers" element={<UserProfile />} />
-          <Route path="/dashboard/events" element={<UserProfile />} />
+          <Route path="/dashboard/events/pending" element={<ViewApproved  />} />
+          <Route path="/dashboard/events/approved" element={<ViewApproved  />} />
           <Route path="/dashboard/organizer" element={<OrganizerDashboard    />} />
           <Route path="/dashboard/organizer/speakers" element={<CreatedSpeakers    />} />
           <Route path="/dashboard/organizer/events" element={<CreatedEvents   />} />

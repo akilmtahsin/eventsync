@@ -3,7 +3,6 @@ import { Switch } from '@headlessui/react';
 import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
-
 export default function SignUp() {
   const navigate = useNavigate();
   const [userType, setUserType] = useState('user');
@@ -22,7 +21,7 @@ export default function SignUp() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError({ __html: '' });
-  
+
     try {
       const response = await fetch(`http://localhost:8000/api/user/signup`, {
         method: 'POST',
@@ -31,12 +30,12 @@ export default function SignUp() {
         },
         body: JSON.stringify({
           role,
-          email, 
+          email,
           password,
           username,
         }),
       });
-  
+
       if (response.ok) {
         const data = await response.json();
         console.log(data);
@@ -51,8 +50,6 @@ export default function SignUp() {
           toast.error('Registration failed. Please try again later.');
         }
       }
-      
-      
     } catch (error) {
       // Handle network or unexpected errors
       console.error('Registration failed:', error);
@@ -62,14 +59,14 @@ export default function SignUp() {
 
   return (
     <div>
-      <div>
-        <img
-          className="mx-auto h-14 w-auto"
-          src="/EventSync.png"
-          alt="EventSync Logo"
-        />
-      </div>
-      <div className=" max-h-screen mx-auto w-96 flex-1 flex-col justify-center items-center py-5 px-8 ">
+      <div className="shadow-lg rounded-md m-10 mx-auto w-[500px] flex-1 flex-col justify-center items-center py-5 px-8">
+        <div>
+          <img
+            className="mx-auto h-14 w-auto mt-4"
+            src="/EventSync.png"
+            alt="EventSync Logo"
+          />
+        </div>
         <div>
           <h2 className=" text-center text-xl font-bold leading-9 tracking-tight text-gray-900">
             Select User Type
@@ -228,9 +225,34 @@ export default function SignUp() {
           <p>Already have an account?</p>
           <Link
             to="/auth/login"
-            className="p-2 hover:text-blue-900 hover:font-bold"
+            className="flex flex-row items-center justify-center gap-2 p-3 text-blue-900 hover:font-bold"
           >
-            Login
+            <p>Login</p>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+  <path fillRule="evenodd" d="M15.75 2.25H21a.75.75 0 0 1 .75.75v5.25a.75.75 0 0 1-1.5 0V4.81L8.03 17.03a.75.75 0 0 1-1.06-1.06L19.19 3.75h-3.44a.75.75 0 0 1 0-1.5Zm-10.5 4.5a1.5 1.5 0 0 0-1.5 1.5v10.5a1.5 1.5 0 0 0 1.5 1.5h10.5a1.5 1.5 0 0 0 1.5-1.5V10.5a.75.75 0 0 1 1.5 0v8.25a3 3 0 0 1-3 3H5.25a3 3 0 0 1-3-3V8.25a3 3 0 0 1 3-3h8.25a.75.75 0 0 1 0 1.5H5.25Z" clipRule="evenodd" />
+</svg>
+
+            
+          </Link>
+        </div>
+        <div className="flex flex-row items-center justify-center gap-2">
+          <Link
+            to="/"
+            className=" font-bold rounded-lg p-2 hover:bg-gray-300 hover:font-bold flex justify-between gap-3"
+          >
+            <p>Continue as a guest</p>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              className="w-6 h-6"
+            >
+              <path
+                fillRule="evenodd"
+                d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm4.28 10.28a.75.75 0 0 0 0-1.06l-3-3a.75.75 0 1 0-1.06 1.06l1.72 1.72H8.25a.75.75 0 0 0 0 1.5h5.69l-1.72 1.72a.75.75 0 1 0 1.06 1.06l3-3Z"
+                clipRule="evenodd"
+              />
+            </svg>
           </Link>
         </div>
       </div>

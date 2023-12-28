@@ -21,9 +21,9 @@ const NavBar = () => {
    
 
   return (
-    <div className="sticky top-0 z-[1000] font-display flex justify-between items-center h-full w-screen max-w-full mx-auto px-4 py-2 backdrop-blur-md">
+    <div className="sticky top-0 z-[1000] font-display flex justify-between items-center h-16 w-screen max-w-full mx-auto px-4 py-2 backdrop-blur-lg">
       <Link to="/">
-        <img src="/EventSync.png" alt="logo" className="h-8 w-auto" />
+        <img src="/EventSync.png" alt="logo" className="ml-5 h-12 w-auto" />
       </Link>
       <ul className="flex justify-between">
         <li className="text-lg p-2 my-3 mr-4 ml-2 hover:text-blue-500 transition-colors">

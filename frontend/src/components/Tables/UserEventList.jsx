@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const UserEventList = () => {
+const UserAttendedEvent = () => {
   // const [done, setDone] = useState({});
 
   let done = false;
@@ -11,32 +11,54 @@ const UserEventList = () => {
         <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
           <div className="overflow-hidden">
             <table className="min-w-full text-left text-sm font-light">
-              <thead className="border-b font-medium bg-blue-800 text-white">
-                <tr>
-                  <th scope="col" className="px-6 py-4">
-                  #
-                  </th>
-                  <th scope="col" className="px-6 py-4">
-                    Event ID
-                  </th>
-                  <th scope="col" className="px-6 py-4">
-                    Event Name
-                  </th>
-                  <th scope="col" className="px-6 py-4">
-                    Organizer
-                  </th>
-                  <th scope="col" className="px-6 py-4">
-                  
-                  </th>
-                </tr>
-              </thead>
+            <thead className="border-b font-medium bg-blue-800 text-white">
+                  <tr>
+                    <th scope="col" className="px-6 py-4">
+                      #
+                    </th>
+                    <th scope="col" className="px-6 py-4">
+                      Event ID
+                    </th>
+                    <th scope="col" className="px-6 py-4">
+                      Event Name
+                    </th>
+                    <th scope="col" className="px-6 py-4">
+                      Event Details
+                    </th>
+                    <th scope="col" className="px-6 py-4">
+                      Type
+                    </th>
+                    
+                    <th scope="col" className="px-6 py-4">
+                      Organized By
+                    </th>
+                    <th scope="col" className="px-6 py-4">
+                      Speakers
+                    </th>
+                    <th scope="col" className="px-6 py-4">
+                      Current Status
+                    </th>
+                    <th scope="col" className="px-6 py-4"></th>
+                  </tr>
+                </thead>
               <tbody>
                 <tr className="border-b dark:border-neutral-500">
                   <td className="whitespace-nowrap px-6 py-4 font-medium">1</td>
-                  <td className="whitespace-nowrap px-6 py-4">Mark</td>
-                  <td className="whitespace-nowrap px-6 py-4">Otto</td>
+                  <td className="whitespace-nowrap px-6 py-4">8399</td>
+                  <td className="whitespace-nowrap px-6 py-4">EventName</td>
+                  <td className="whitespace-wrap px-6 py-4"><div className='w-60 text-justify'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo cum voluptates autem, illo quaerat mollitia et impedit quas minima repellendus ab accusamus?</div></td>
 
-                  <td className="whitespace-nowrap px-6 py-4">Amount</td>
+                  <td className="whitespace-nowrap px-6 py-4">Type</td>
+                  <td className="whitespace-nowrap px-6 py-4">Organizer</td>
+                  <td className="whitespace-nowrap px-6 py-4">
+                      <div>
+                      <ul>
+                        <li className='list-disc'>Speaker 1</li>
+                        <li className='list-disc'>Speker 2</li>
+                        </ul>
+                        </div>
+                        </td>
+                        <td className="whitespace-nowrap px-6 py-4">In 3 Days</td>
                   <td className="whitespace-nowrap px-6 py-4">
                     <div className=" max-w-full flex justify-center">
                       {!done ? (
@@ -95,4 +117,4 @@ const UserEventList = () => {
   );
 };
 
-export default UserEventList;
+export default UserAttendedEvent;

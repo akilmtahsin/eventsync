@@ -1,12 +1,12 @@
 import { NavLink } from 'react-router-dom';
-import EventSync from '../Images/EventSync.png'
+
 
 const Sidebar = () => {
   return (
     <aside className="absolute left-0 top-0 z-9999 flex h-screen w-72.5 flex-col overflow-y-hidden bg-blue-gray-800 font-sans text-white duration-300 ease-linear lg:static lg:translate-x-0">
       <div className="flex items-center justify-center mt-4 gap-2 px-6 py-5.5 lg:py-6.5">
         <NavLink to="/">
-          <img src={EventSync} alt="Logo" className="h-12 w-auto" />
+          <img src="EventSync.png" alt="Logo" className="h-12 w-auto" />
         </NavLink>
       </div>
 
@@ -32,12 +32,44 @@ const Sidebar = () => {
                   to="/dashboard/requests"
                   className="group relative flex items-center gap-2.5 rounded-lg py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-blue-800/30 "
                 >
-                  Pending Approval Requests
+                  Approval Requests
                 </NavLink>
               </li>
               <li>
                 <NavLink
-                  to="/dashboard"
+                  to="/dashboard/requests"
+                  className="group relative flex items-center gap-2.5 rounded-lg py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-blue-800/30 "
+                >
+                  Approved Events
+                </NavLink>
+              </li>
+              <li>
+              <NavLink
+                  to="/dashboard/requests"
+                  className="group relative flex items-center gap-2.5 rounded-lg py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-blue-800/30 "
+                >
+                  Approved Events
+                </NavLink>
+              </li>
+              <li>
+              <NavLink
+                  to="/dashboard/requests"
+                  className="group relative flex items-center gap-2.5 rounded-lg py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-blue-800/30 "
+                >
+                  Ongoing Events
+                </NavLink>
+              </li>
+              <li>
+              <NavLink
+                  to="/dashboard/requests"
+                  className="group relative flex items-center gap-2.5 rounded-lg py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-blue-800/30 "
+                >
+                  Rejected Events
+                </NavLink>   
+              </li>
+              <li>
+                <NavLink
+                  to="/dashboard/events"
                   className="group relative flex items-center gap-2.5 rounded-lg py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-blue-800/30 "
                 >
                   All Events
@@ -102,6 +134,30 @@ const Sidebar = () => {
                   className="group relative flex items-center gap-2.5 rounded-lg py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-blue-800/30 "
                 >
                   My Events
+                </NavLink>
+              </li>
+              <li>
+              <NavLink
+                  to="/dashboard/requests"
+                  className="group relative flex items-center gap-2.5 rounded-lg py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-blue-800/30 "
+                >
+                  Approved Events
+                </NavLink>
+              </li>
+              <li>
+              <NavLink
+                  to="/dashboard/requests"
+                  className="group relative flex items-center gap-2.5 rounded-lg py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-blue-800/30 "
+                >
+                  Rejected Events
+                </NavLink>
+              </li>
+              <li>
+              <NavLink
+                  to="/dashboard/requests"
+                  className="group relative flex items-center gap-2.5 rounded-lg py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-blue-800/30 "
+                >
+                  Requested Events
                 </NavLink>
               </li>
 

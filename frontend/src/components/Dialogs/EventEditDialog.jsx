@@ -7,7 +7,7 @@ import {
   DialogFooter,
 } from '@material-tailwind/react';
 
-export function EventCreationDialog() {
+export function EventEditDialog() {
   const [speakers, setSpeakers] = useState([{ name: '', designation: '' }]);
   const [open, setOpen] = React.useState(false);
   const [paymentStatus, setPaymentStatus] = useState('');

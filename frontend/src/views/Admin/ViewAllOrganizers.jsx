@@ -1,4 +1,4 @@
-import React from 'react'
+
 
 const ViewAllOrganizers = () => {
   return (
@@ -10,7 +10,7 @@ const ViewAllOrganizers = () => {
         
 
         </div>
-        <AdminSpeakerList/>
+        
     </div>
     </div>
     </div>
