@@ -19,7 +19,8 @@ const speakerSchema = mongoose.Schema({
    
   },
   image: {
-    type: String
+    type: String,
+    default:  '' ,
     
   }
 });

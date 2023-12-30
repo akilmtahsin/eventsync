@@ -23,6 +23,7 @@ const createSpeaker = async (req, res) => {
     const newSpeaker = Speaker({
       name: req.body.name,
       designation: req.body.designation,
+      details: req.body.details,
     });
 
     await newSpeaker.save();
