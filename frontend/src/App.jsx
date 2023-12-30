@@ -31,6 +31,15 @@ import ViewAllPayments from './views/Admin/ViewAllPayments';
 import ViewAllEvents from './views/Admin/ViewAllApproved';
 import ViewAllApproval from './views/Admin/ViewAllPending';
 import ViewApproved from './views/Admin/ViewAllApproved';
+import ViewAllPending from './views/Admin/ViewAllPending';
+import ViewAllOngoing from './views/Admin/ViewAllOngoing';
+import ViewAllRejected from './views/Admin/ViewAllRejected';
+import PendingEvents from './views/Organizer/PendingEvents';
+import ApprovedEvents from './views/Organizer/ApprovedEvents';
+import RejectedEvents from './views/Organizer/RejectedEvents';
+import OngoingEvents from './views/Organizer/OngoingEvents';
+import Checkoutpage from './views/Checkoutpage';
+import CheckoutPage from './views/Checkoutpage';
 // import DashboardRoute from './Routes/DashboardRoute';
 
 // const DashboardRoute = ({ element, userRole, allowedRoles }) => {
@@ -76,6 +85,11 @@ const publicRoutes = [
   {
     path: '/speakers',
     component: Speakers,
+  },
+//protected
+  {
+    path: '/checkout',
+    component: CheckoutPage,
   },
 
   {
@@ -133,11 +147,17 @@ function App() {
           <Route path="/dashboard/organizers" element={<ViewAllOrganizers   />} />
           <Route path="/dashboard/speakers" element={<ViewAllSpeakers  />} />
           <Route path="/dashboard/payments" element={<ViewAllPayments  />} />
-          <Route path="/dashboard/events/pending" element={<ViewApproved  />} />
+          <Route path="/dashboard/events/pending" element={<ViewAllPending  />} />
           <Route path="/dashboard/events/approved" element={<ViewApproved  />} />
+          <Route path="/dashboard/events/ongoing" element={<ViewAllOngoing  />} />
+          <Route path="/dashboard/events/rejected" element={<ViewAllRejected  />} />
           <Route path="/dashboard/organizer" element={<OrganizerDashboard    />} />
           <Route path="/dashboard/organizer/speakers" element={<CreatedSpeakers    />} />
           <Route path="/dashboard/organizer/events" element={<CreatedEvents   />} />
+          <Route path="/dashboard/organizer/events/pending" element={<PendingEvents   />} />
+          <Route path="/dashboard/organizer/events/approved" element={<ApprovedEvents   />} />
+          <Route path="/dashboard/organizer/events/rejected" element={<RejectedEvents   />} />
+          <Route path="/dashboard/organizer/events/ongoing" element={<OngoingEvents   />} />
           <Route path="/dashboard/organizer/events/create" element={<EventCreationForm   />} />
           <Route path="/dashboard/user/profile" element={<UserProfile />} />
           <Route path="/dashboard/user/payments" element={<UserPayments />} />

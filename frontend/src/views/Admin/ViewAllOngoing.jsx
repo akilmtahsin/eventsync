@@ -1,12 +1,12 @@
 
 
-
-import { AdminEventRejected } from "../../components/Tables/AdminEventRejectedTable";
-
+import { AdminEventOngoing } from "../../components/Tables/AdminEventOngoingTable";
 
 
 
-const ViewAllRejected = () => {
+
+
+const ViewAllOngoing = () => {
   return (
     <div>
       <div className="bg-white flex flex-col shadow-lg p-10">
@@ -15,10 +15,10 @@ const ViewAllRejected = () => {
         
 
         </div>
-        <AdminEventRejected/>
+        <AdminEventOngoing/>
     </div>
     </div>
   )
 }
 
-export default ViewAllRejected;
+export default ViewAllOngoing;

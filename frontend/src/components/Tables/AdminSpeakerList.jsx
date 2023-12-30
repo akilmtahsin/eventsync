@@ -1,4 +1,4 @@
-const AdminSpeakerList = () => {
+const AdminSpeakerTable = () => {
   return (
     <div className="flex flex-col">
       <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -17,11 +17,18 @@ const AdminSpeakerList = () => {
                     Speaker Name
                   </th>
                   <th scope="col" className="px-6 py-4">
+                    Designation
+                  </th>
+                  <th scope="col" className="px-6 py-4">
                     Speaker Description
+                  </th>
+                  <th scope="col" className="px-6 py-4">
+                    Events
                   </th>
                   <th scope="col" className="px-6 py-4">
                     Rating
                   </th>
+
                   <th scope="col" className="px-6 py-4"></th>
                 </tr>
               </thead>
@@ -30,6 +37,7 @@ const AdminSpeakerList = () => {
                   <td className="whitespace-nowrap px-6 py-4 font-medium">1</td>
                   <td className="whitespace-nowrap px-6 py-4">23344</td>
                   <td className="whitespace-nowrap px-6 py-4">NameofSPeker</td>
+                  <td className="whitespace-nowrap px-6 py-4">designation</td>
 
                   <td className="whitespace-wrap px-6 py-4">
                     Lorem ipsum dolor sit amet, consectetur adipisicing elit. In
@@ -38,6 +46,7 @@ const AdminSpeakerList = () => {
                     molestias repellat modi! Animi tempora reprehenderit rem
                     fugiat, officiis incidunt voluptatibus.
                   </td>
+                  <td className="whitespace-nowrap px-6 py-4">Number with ViewList Popup</td>
                   <td className="whitespace-nowrap px-6 py-4">4.7</td>
                   <td className="whitespace-nowrap px-6 py-4">
                     <div className=" max-w-full flex justify-center">
@@ -71,4 +80,4 @@ const AdminSpeakerList = () => {
   );
 };
 
-export default AdminSpeakerList;
+export default AdminSpeakerTable;

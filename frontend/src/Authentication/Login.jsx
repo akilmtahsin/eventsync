@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { Link, useNavigate } from 'react-router-dom';
 import { cookies } from '../../config/cookies';
-import { jwtDecode } from 'jwt-decode';
+
 // const BASE_URL = import.meta.env.BASE_URL;
 
 export default function Login() {
@@ -28,8 +28,7 @@ export default function Login() {
       if (response.ok) {
         const data = await response.json();
         cookies.set('user_token', data.token);
-        const token = jwtDecode(data.token);
-        const role = token.role;
+       
         toast.success('Successfully Logged in');
         navigate('/');
       } else {

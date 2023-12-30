@@ -1,12 +1,13 @@
+//list of created events with status approved
+
+
+import { OrganizerEventOngoing } from "../../components/Tables/OrganizerEventOngoing";
 
 
 
-import { AdminEventRejected } from "../../components/Tables/AdminEventRejectedTable";
 
 
-
-
-const ViewAllRejected = () => {
+const OngoingEvents = () => {
   return (
     <div>
       <div className="bg-white flex flex-col shadow-lg p-10">
@@ -15,10 +16,10 @@ const ViewAllRejected = () => {
         
 
         </div>
-        <AdminEventRejected/>
+        <OrganizerEventOngoing/>
     </div>
     </div>
   )
 }
 
-export default ViewAllRejected;
+export default OngoingEvents;

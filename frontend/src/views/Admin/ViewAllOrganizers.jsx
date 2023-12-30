@@ -1,3 +1,4 @@
+import AdminOrganizerTable from "../../components/Tables/AdminOrganizerList";
 
 
 const ViewAllOrganizers = () => {
@@ -10,7 +11,7 @@ const ViewAllOrganizers = () => {
         
 
         </div>
-        
+        <AdminOrganizerTable/>
     </div>
     </div>
     </div>

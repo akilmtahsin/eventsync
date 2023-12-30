@@ -29,7 +29,7 @@ const Sidebar = () => {
               </li>
               <li>
                 <NavLink
-                  to="/dashboard/requests"
+                  to="/dashboard/events/pending"
                   className="group relative flex items-center gap-2.5 rounded-lg py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-blue-800/30 "
                 >
                   Approval Requests
@@ -37,7 +37,7 @@ const Sidebar = () => {
               </li>
               <li>
                 <NavLink
-                  to="/dashboard/requests"
+                  to="/dashboard/events/approved"
                   className="group relative flex items-center gap-2.5 rounded-lg py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-blue-800/30 "
                 >
                   Approved Events
@@ -45,15 +45,7 @@ const Sidebar = () => {
               </li>
               <li>
               <NavLink
-                  to="/dashboard/requests"
-                  className="group relative flex items-center gap-2.5 rounded-lg py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-blue-800/30 "
-                >
-                  Approved Events
-                </NavLink>
-              </li>
-              <li>
-              <NavLink
-                  to="/dashboard/requests"
+                  to="/dashboard/events/ongoing"
                   className="group relative flex items-center gap-2.5 rounded-lg py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-blue-800/30 "
                 >
                   Ongoing Events
@@ -61,12 +53,13 @@ const Sidebar = () => {
               </li>
               <li>
               <NavLink
-                  to="/dashboard/requests"
+                  to="/dashboard/events/rejected"
                   className="group relative flex items-center gap-2.5 rounded-lg py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-blue-800/30 "
                 >
                   Rejected Events
-                </NavLink>   
+                </NavLink>
               </li>
+              
               <li>
                 <NavLink
                   to="/dashboard/events"
@@ -138,7 +131,7 @@ const Sidebar = () => {
               </li>
               <li>
               <NavLink
-                  to="/dashboard/requests"
+                  to="/dashboard/organizer/events/approved"
                   className="group relative flex items-center gap-2.5 rounded-lg py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-blue-800/30 "
                 >
                   Approved Events
@@ -146,20 +139,29 @@ const Sidebar = () => {
               </li>
               <li>
               <NavLink
-                  to="/dashboard/requests"
+                  to="/dashboard/organizer/events/pending"
+                  className="group relative flex items-center gap-2.5 rounded-lg py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-blue-800/30 "
+                >
+                  Pending Events
+                </NavLink>
+              </li>
+              <li>
+              <NavLink
+                  to="/dashboard/organizer/events/ongoing"
+                  className="group relative flex items-center gap-2.5 rounded-lg py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-blue-800/30 "
+                >
+                  Ongoing Events
+                </NavLink>
+              </li>
+              <li>
+              <NavLink
+                  to="/dashboard/organizer/events/rejected"
                   className="group relative flex items-center gap-2.5 rounded-lg py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-blue-800/30 "
                 >
                   Rejected Events
                 </NavLink>
               </li>
-              <li>
-              <NavLink
-                  to="/dashboard/requests"
-                  className="group relative flex items-center gap-2.5 rounded-lg py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-blue-800/30 "
-                >
-                  Requested Events
-                </NavLink>
-              </li>
+              
 
 
               <li>

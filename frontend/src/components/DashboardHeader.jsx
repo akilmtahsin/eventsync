@@ -27,7 +27,7 @@ const DashboardHeader = () => {
               <input
                 type="text"
                 placeholder="Type to search..."
-                className="w-full bg-transparent pr-4 pl-9 border-none outline-none focus:border-none  "
+                className="w-full bg-transparent pr-4 pl-9 border-none outline-none focus:border-none focus:ring-0"
               />
             </div>
           </form>

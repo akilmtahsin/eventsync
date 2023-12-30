@@ -1,16 +1,11 @@
 import { useState } from 'react';
 import { Chip } from '@material-tailwind/react';
 
-
-
-
 export function AdminEventApproved() {
   const [paymentStatus, setPaymentStatus] = useState('unpaid');
   const [paymentAmount, setPaymentAmount] = useState('100');
   const [status, setStatus] = useState('approved');
   const [rating, setRating] = useState('4');
-
-  
 
   return (
     <div className="flex flex-col">
@@ -61,47 +56,56 @@ export function AdminEventApproved() {
                     </td>
                     <td className="whitespace-nowrap px-6 py-4">id</td>
                     <td className="whitespace-nowrap px-6 py-4">Name</td>
-                    <td className="whitespace-wrap px-6 py-4"><div className='w-60 text-justify'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo cum voluptates autem, illo quaerat mollitia et impedit quas minima repellendus ab accusamus?</div></td>
+                    <td className="whitespace-wrap px-6 py-4">
+                      <div className="w-60 text-justify">
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                        Nemo cum voluptates autem, illo quaerat mollitia et
+                        impedit quas minima repellendus ab accusamus?
+                      </div>
+                    </td>
                     <td className="whitespace-nowrap px-6 py-4">Seminar</td>
                     <td className="whitespace-nowrap px-6 py-4">Organizer</td>
                     <td className="whitespace-nowrap px-6 py-4">
                       <div>
-                      <ul>
-                        <li className='list-disc'>Speaker 1</li>
-                        <li className='list-disc'>Speker 2</li>
+                        <ul>
+                          <li className="list-disc">Speaker 1</li>
+                          <li className="list-disc">Speker 2</li>
                         </ul>
-                        </div>
-                        </td>
+                      </div>
+                    </td>
 
-                    <td className="whitespace-nowrap px-6 py-4"> 
-                    <div className="max-w-full flex justify-center">
+                    <td className="whitespace-nowrap px-6 py-4">
+                      <div className="max-w-full flex justify-center">
                         {paymentStatus === 'paid' && (
-                          <Chip color="orange" value={`${paymentAmount} Taka`} />
+                          <Chip
+                            color="orange"
+                            value={`${paymentAmount} Taka`}
+                          />
                         )}
                         {paymentStatus === 'unpaid' && (
                           <Chip color="amber" value="Unpaid" />
                         )}
                       </div>
-                      </td>
+                    </td>
                     <td className="whitespace-nowrap px-6 py-4">
                       <div className="max-w-full flex justify-center">
-                      <Chip color="green" value="Approved" />
+                        <Chip color="green" value="Approved" />
                       </div>
                     </td>
-                    <td className="whitespace-nowrap px-6 py-4">{status === 'pending' && status==='rejected' ? (
-                        
-                        <Chip variant="ghost" value="Not Available" className="rounded-full" />
-                        
+                    <td className="whitespace-nowrap px-6 py-4">
+                      {status === 'pending' || status === 'rejected' ? (
+                        <Chip
+                          variant="ghost"
+                          value="Not Available"
+                          className="rounded-full"
+                        />
                       ) : (
-                        
                         <Chip value="4.7" className="rounded-full" />
-                        
-                      )}</td>
+                      )}
+                    </td>
 
                     <td className="whitespace-nowrap px-6 py-4">
                       <div className=" max-w-full flex justify-center">
-                        
-
                         <button className="flex gap-x-2 justify-between items-center mr-3 bg-red-500 hover:bg-opacity-90 rounded-full p-3 text-white">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -132,5 +136,3 @@ export function AdminEventApproved() {
     </div>
   );
 }
-
-

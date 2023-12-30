@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { Chip } from '@material-tailwind/react';
 
-export function AdminEventPending() {
+export function AdminEventOngoing() {
   const [paymentStatus, setPaymentStatus] = useState('unpaid');
   const [paymentAmount, setPaymentAmount] = useState('100');
-  const [status, setStatus] = useState('pending');
+  const [status, setStatus] = useState('ongoing');
   const [rating, setRating] = useState('4');
 
   return (
@@ -37,7 +37,6 @@ export function AdminEventPending() {
                     <th scope="col" className="px-6 py-4">
                       Speakers
                     </th>
-
                     <th scope="col" className="px-6 py-4">
                       Payment
                     </th>
@@ -90,7 +89,7 @@ export function AdminEventPending() {
                     </td>
                     <td className="whitespace-nowrap px-6 py-4">
                       <div className="max-w-full flex justify-center">
-                        <Chip color="amber" value="Pending" />
+                        <Chip color="blue" value="Ongoing" />
                       </div>
                     </td>
                     <td className="whitespace-nowrap px-6 py-4">

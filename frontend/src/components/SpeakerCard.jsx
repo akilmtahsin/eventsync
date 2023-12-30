@@ -21,16 +21,16 @@ export function SpeakerCard() {
     <div>
       <Card
         onClick={handleOpen}
-        className="w-85 hover:drop-shadow-2xl cursor-pointer hover:bg-blue-100 "
+        className="w-56 cursor-pointer hover:bg-blue-100 "
       >
-        <CardHeader floated={false} className="h-80 w-90 object-cover">
+        <CardHeader floated={false} className="h-36 object-cover shadow-none">
           <img
-            src="https://docs.material-tailwind.com/img/face-2.jpg"
+            src="/Images/dp.jpg"
             alt="profile-picture"
           />
         </CardHeader>
         <CardBody className="text-center">
-          <Typography variant="h4" color="blue-gray" className="mb-2">
+          <Typography variant="h5" color="blue-gray" className="mb-2">
             Natalie Paisley
           </Typography>
           <Typography color="blue-gray" className="font-medium" textGradient>
@@ -38,7 +38,7 @@ export function SpeakerCard() {
           </Typography>
         </CardBody>
         <CardFooter className="flex justify-center gap-7 pt-2">
-          <Typography variant="h5" color="blue-gray" className="font-medium">
+          <Typography variant="h6" color="blue-gray" className="font-medium">
             Rated
           </Typography>
           <Typography
