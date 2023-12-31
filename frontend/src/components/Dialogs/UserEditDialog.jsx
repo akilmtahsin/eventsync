@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Button,
   Dialog,
@@ -9,18 +9,46 @@ import {
 
 import { cookies } from '../../../config/cookies';
 
-export function UserEditDialog() {
-
- 
-
-  const [imageUrl, setImageUrl] = useState('');
-  const [open, setOpen] = useState(false);
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-
+export function UserEditDialog({ handleModalClose }) {
   const token = cookies.get('user_token');
 
-  const handleOpen = () => setOpen(!open);
+  const [formData, setFormData] = useState({
+    imageUrl: '',
+    username: '',
+    email: '',
+  });
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const res = await fetch(``, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            authorization: `Bearer ${token}`,
+          },
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setFormData({
+            imageUrl: data.imageUrl,
+            username: data.username,
+            email: data.email,
+          });
+        }
+      } catch (error) {
+        console.log('Profile error', error);
+      }
+      fetchProfile();
+    };
+  }, []);
+
+  const handleInputFieldChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
 
   const handleImageChange = (event) => {
     const file = event.target.files?.[0];
@@ -29,9 +57,11 @@ export function UserEditDialog() {
 
       reader.onload = (e) => {
         const imageUrl = e.target?.result;
-        setImageUrl(imageUrl);
+        setFormData({
+          ...formData,
+          imageUrl,
+        });
       };
-
       reader.readAsDataURL(file);
     }
   };
@@ -41,21 +71,14 @@ export function UserEditDialog() {
       const response = await fetch('http://localhost:8000/api/user/update', {
         method: 'PUT',
         headers: {
-          Authorization: `Bearer ${token}`, 
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({
-         username,
-         email,
-         imageUrl
-        }),
+        body: JSON.stringify(formData),
       });
-    
 
       if (response.ok) {
-        
         console.log('Profile updated successfully');
       } else {
-      
         console.error('Error updating user profile:', response.statusText);
       }
     } catch (error) {
@@ -70,30 +93,10 @@ export function UserEditDialog() {
 
   return (
     <>
-      <Button
-        onClick={handleOpen}
-        className=" h-16 text-lg bg-green-800 hover:opacity-90 flex gap-x-3 items-center -z-4 "
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={1.5}
-          stroke="currentColor"
-          className="w-6 h-6"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
-          />
-        </svg>
-        Edit Info
-      </Button>
-      <Dialog  open={open} handler={handleOpen}>
+      <Dialog open={true}>
         <DialogHeader>Edit Personal Info</DialogHeader>
         <DialogBody>
-          <form action="POST" >
+          <form action="POST">
             <div className="p-6.5">
               <div className="mb-4.5 flex flex-col gap-6">
                 <div className="w-full">
@@ -104,8 +107,9 @@ export function UserEditDialog() {
                     type="text"
                     placeholder="Edit your name"
                     className="w-full rounded border-[1.5px] border-solid bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-red-600 disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
+                    value={formData.username}
+                    onChange={handleConfirm}
+                    name="username"
                   />
                 </div>
               </div>
@@ -120,8 +124,9 @@ export function UserEditDialog() {
                     type="email"
                     placeholder="Edit your email"
                     className="w-full rounded border-[1.5px] border-solid bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-red-600 disabled:cursor-default disabled:bg-white "
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    value={formData.email}
+                    onChange={handleInputFieldChange}
+                    name="email"
                   />
                 </div>
               </div>
@@ -139,7 +144,7 @@ export function UserEditDialog() {
                     onChange={handleImageChange}
                   />
                   <img
-                    src={imageUrl}
+                    src={formData.imageUrl}
                     alt="Preview"
                     style={{
                       maxWidth: '100%',
@@ -154,7 +159,7 @@ export function UserEditDialog() {
         </DialogBody>
         <DialogFooter>
           <div className="flex justify-between w-56 ">
-            <Button variant="gradient" color="red" onClick={handleOpen}>
+            <Button variant="gradient" color="red" onClick={handleModalClose}>
               <span>Cancel</span>
             </Button>
             <Button
