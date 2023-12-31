@@ -22,6 +22,10 @@ const userSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  imageUrl: {
+    type: String,
+    default: '/Images/dp.jpg',
+  },
 });
 
 module.exports = mongoose.model('User', userSchema);

@@ -58,7 +58,6 @@ const viewProfile = async (req, res) => {
 
   try {
     const user = await User.findOne({ _id: req.userId });
-    
     res.status(200).json(user);
   } catch (error) {
     res.status(500).send(error.message);
@@ -67,14 +66,26 @@ const viewProfile = async (req, res) => {
 
 const updateProfile = async (req, res) => {
   try {
-    const user = await User.findOne({ _id: req.userId });
-    user.name = req.body.name;
-    user.email = req.body.email;
-    await speaker.save();
-    res.status(200).json(user);
+    const { username, email, imageUrl } = req.body;
+    const updatedUser = await User.findOne({ _id: req.userId });
+
+    console.log(userId);
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    updatedUser.username = username;
+    updatedUser.email = email;
+    updatedUser.imageUrl = imageUrl;
+
+    await updatedUser.save();
+    res.status(200).json({ message: "Successfully updated" });
   } catch (error) {
-    res.status(500).send(error.message);
+    console.error("Error updating profile:", error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
 
 module.exports = { Signup, Login, viewProfile, updateProfile };

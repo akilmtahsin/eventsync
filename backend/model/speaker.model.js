@@ -18,9 +18,9 @@ const speakerSchema = mongoose.Schema({
     type: Number
    
   },
-  image: {
+  imageUrl: {
     type: String,
-    default:  '' ,
+    default:  'Images/dp.jpg' ,
     
   }
 });

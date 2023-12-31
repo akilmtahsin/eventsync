@@ -28,7 +28,6 @@ export default function Login() {
       if (response.ok) {
         const data = await response.json();
         cookies.set('user_token', data.token);
-       
         toast.success('Successfully Logged in');
         navigate('/');
       } else {

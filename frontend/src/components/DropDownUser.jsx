@@ -11,6 +11,41 @@ const DropdownUser = () => {
   const trigger = useRef(null);
   const dropdown = useRef(null);
 
+  const [username, setUsername] = useState('');
+  const [role, setRole] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
+
+  const token = cookies.get('user_token');
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        
+        const response = await fetch('http://localhost:8000/api/user/profile', {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`, 
+          },
+        });
+
+        if (response.ok) {
+          const user = await response.json();
+          setUsername(user.username);
+          setRole(user.role);
+          setImageUrl(user.imageUrl);
+        } else {
+          // Handle error response
+          console.error('Error fetching user profile:', response.statusText);
+        }
+      } catch (error) {
+        console.error('Error fetching user profile:', error.message);
+      }
+    };
+
+    fetchUserProfile();
+  }, []);
+
+
   const handleLogout = () => {
     console.log('Logging out...');
   
@@ -59,13 +94,16 @@ const DropdownUser = () => {
       >
         <span className="hidden text-right lg:block">
           <span className="block font-medium text-black dark:text-white text-lg">
-            user@email.com
+           {username}
+          </span>
+          <span className="block font-medium text-black dark:text-white text-sm">
+            {role}
           </span>
         
         </span>
 
         <span className="h-12 w-12 rounded-full">
-        <Avatar src="https://docs.material-tailwind.com/img/face-2.jpg" alt="avatar" />
+        <Avatar src={imageUrl} alt="avatar" />
         </span>
 
         <svg
@@ -92,7 +130,7 @@ const DropdownUser = () => {
         ref={dropdown}
         onFocus={() => setDropdownOpen(true)}
         onBlur={() => setDropdownOpen(false)}
-        className={`absolute right-0 mt-4 flex w-62.5 flex-col rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark ${
+        className={`absolute right-0 mt-4 flex w-52  flex-col rounded-sm border border-stroke bg-white shadow-2xl dark:border-strokedark dark:bg-boxdark ${
           dropdownOpen === true ? 'block' : 'hidden'
         }`}
       >

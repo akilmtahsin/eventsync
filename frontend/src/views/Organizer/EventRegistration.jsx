@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from 'react';
 
 export default function EventCreationForm() {
   const [speakers, setSpeakers] = useState([{ name: '', designation: '' }]);
@@ -25,18 +25,16 @@ export default function EventCreationForm() {
     // Perform form submission logic here
 
     // Reset the form state if needed
-    
   };
   return (
-    
     <>
       <div className="bg-white flex flex-col shadow-lg p-10">
         <h1 className="font-display font-medium tracking-tighter text-blue-600 text-3xl p-10">
           Create New Event
         </h1>
-      
-      <div className="flex flex-col justify-between">
-      <form action="POST" onSubmit={handleSubmit}>
+
+        <div className="flex flex-col justify-between">
+          <form action="POST" onSubmit={handleSubmit}>
             <div className="p-3">
               <div className="mb-3 flex flex-col gap-6">
                 <div className="w-full">
@@ -72,8 +70,10 @@ export default function EventCreationForm() {
                   <label className="mb-2 block text-black dark:text-white">
                     Event Type
                   </label>
-                  <select required className="w-full rounded border-[1.5px] border-solid bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-red-600 disabled:cursor-default disabled:bg-white">
-                    
+                  <select
+                    required
+                    className="w-full rounded border-[1.5px] border-solid bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-red-600 disabled:cursor-default disabled:bg-white"
+                  >
                     <option value="seminar">Seminar</option>
                     <option value="webinar">Webinar</option>
                     <option value="conference">Conference</option>
@@ -144,7 +144,9 @@ export default function EventCreationForm() {
               </div>
             </div>
             <div className="border-2 border-blue-600 p-3 ">
-              <h4 className="mb-3 p-3 font-bold text-xl text-blue-600">Speaker Section</h4>
+              <h4 className="mb-3 p-3 font-bold text-xl text-blue-600">
+                Speaker Selection
+              </h4>
               <div className="p-3">
                 <div className="mb-3 flex flex-col gap-6">
                   {speakers.map((speaker, index) => (
@@ -153,39 +155,27 @@ export default function EventCreationForm() {
                         <label className="mb-2 block text-black dark:text-white">
                           Speaker {index + 1} Name
                         </label>
-                        <input
-                          type="text"
-                          placeholder={`Speaker ${index + 1} Name`}
-                          required
-                          className="w-full rounded border-[1.5px] border-solid bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-red-600 disabled:cursor-default disabled:bg-white"
-                          value={speaker.name}
-                          onChange={(e) =>
-                            handleSpeakerChange(index, 'name', e.target.value)
-                          }
-                        />
-                      </div>
-                      <div className="mb-3">
-                        <label className="mb-2 block text-black dark:text-white">
-                          Speaker {index + 1} Designation
-                        </label>
-                        <input
-                          type="text"
-                          placeholder={`Speaker ${index + 1} Designation`}
-                          required
-                          className="w-full rounded border-[1.5px] border-solid bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-red-600 disabled:cursor-default disabled:bg-white"
-                          value={speaker.designation}
-                          onChange={(e) =>
-                            handleSpeakerChange(
-                              index,
-                              'designation',
-                              e.target.value
-                            )
-                          }
-                        />
+                        <div>
+                          <select
+                            required
+                            className="w-full rounded border-[1.5px] border-solid bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-red-600 disabled:cursor-default disabled:bg-white"
+                            value={speaker.name}
+                            onChange={(e) =>
+                              handleSpeakerChange(index, 'name', e.target.value)
+                            }
+                          >
+                            <option value="" disabled>
+                              Select a speaker
+                            </option>
+                            <option value="Speaker 1">Speaker 1</option>
+                            <option value="Speaker 2">Speaker 2</option>
+                          
+                          </select>
+                        </div>
                       </div>
                     </div>
                   ))}
-            </div>
+                </div>
               </div>
             </div>
 
@@ -200,14 +190,12 @@ export default function EventCreationForm() {
               <button
                 type="submit"
                 className="bg-green-400 text-white py-2 px-4 rounded mt-4"
-              
               >
                 Submit
               </button>
-              
             </div>
           </form>
-      </div>
+        </div>
       </div>
     </>
   );

@@ -10,25 +10,38 @@ const auth = (req, res, next ) => {
     if (token) {
       token = token.split(" ")[1];
       let user = jwt.verify(token,jwt_key);
+    
       req.userId = user.id;
-      
-      if (user.role === 'user') {
-        req.userId = user.id;
-        req.organizerId = null; // You can set it to null or any default value
-      } else if (user.role === 'organizer') {
-        req.userId = null; // You can set it to null or any default value
-        req.organizerId = user.id;
-      }
+      req.userRole = user.role;
+
+      // if (user.role === 'user') {
+      //   req.userId = user.id;
+      //   req.uid = user.id;
+     
+        
+      // } else if (user.role === 'organizer') {
+        
+      //   req.organizerId = user.id;
+      //   req.uid = user.id;
+      // }
+      // else if (user.role === 'admin') {
+        
+      //   req.adminId = user.id;
+      //   req.uid = user.id;
+      // }
       
     } else {
       res.status(401).json({message: "Unauthorized"})
     }
 
+   
+
+
     next();
     
   } catch (error) {
     console.log(error);
-    res.status(401).json({ messsage: 'Token is invalid' });
+    res.status(401).json({ messsage: 'Cannot Parse Token. Please Log to your respective account.' });
   }
 }
 

@@ -25,9 +25,6 @@ const createEvent = async (req, res) => {
       return res.status(403).json({message: "Not Authorized"});
     }
 
-   
-    
-
     // Create Event document with speaker references
     const createdEvent = await Event.create({
       eventName,
