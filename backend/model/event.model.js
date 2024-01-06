@@ -1,4 +1,11 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
+
+
+const speakerSchema = new mongoose.Schema({
+  id: {type: String},
+  name: { type: String},
+  designation: { type: String},
+});
 
 const eventSchema = mongoose.Schema({
   eventName: {
@@ -7,7 +14,7 @@ const eventSchema = mongoose.Schema({
   },
   eventType: {
     type: String,
-    enum: ['seminar', 'webinar', 'conference'],
+    enum: ["seminar", "webinar", "conference"],
     required: true,
   },
   eventDetails: {
@@ -15,25 +22,25 @@ const eventSchema = mongoose.Schema({
   },
   eventBannerUrl: {
     type: String,
-    default: 'https://images.unsplash.com/photo-1682407186023-12c70a4a35e0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2832&q=80',
+    default:
+      "https://images.unsplash.com/photo-1682407186023-12c70a4a35e0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2832&q=80",
   },
   paymentStatus: {
     type: String,
-    enum: ['paid', 'unpaid'],
+    enum: ["paid", "unpaid"],
     required: true,
   },
   paymentAmount: {
     type: Number,
+    default: 0,
   },
-  eventDate: {
-    from: {
-      type: Date,
-      required: true,
-    },
-    to: {
-      type: Date,
-      required: true,
-    },
+  eventStart: {
+    type: Date,
+    required: true,
+  },
+  eventEnd: {
+    type: Date,
+    required: true,
   },
   eventVenue: {
     type: String,
@@ -45,29 +52,16 @@ const eventSchema = mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['pending', 'approved', 'rejected'],
-    default: 'pending',
+    enum: ["pending", "approved", "rejected"],
+    default: "pending",
   },
-  speakers: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Speaker', 
-    },
-  ],
+  speakers: [speakerSchema],
   organizer: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+    type: String,
     required: true,
-    validate: {
-      validator: async function (userId) {
-        const user = await mongoose.model('User').findById(userId);
-        return user && user.role === 'organizer';
-      },
-      message: 'Must be an Organizer',
-    },
   },
 });
 
-const Event = mongoose.model('Event', eventSchema);
+const Event = mongoose.model("Event", eventSchema);
 
 module.exports = Event;

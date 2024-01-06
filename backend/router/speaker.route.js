@@ -7,12 +7,14 @@ const {
   deleteSpeaker,
 } = require("../controller/speaker.controller");
 
+const auth = require('../middleware/auth');
+
 const router = express.Router();
 
-router.get("/", getAllSpeaker);
-router.get("/:id", getOneSpeaker);
-router.post("/create", createSpeaker);
-router.patch("/update/:id", updateSpeaker);
-router.delete("/delete/:id", deleteSpeaker);
+router.get("/all",auth, getAllSpeaker);
+router.get("/profile/:id",auth, getOneSpeaker);
+router.post("/create",auth, createSpeaker);
+router.patch("/update/:id",auth, updateSpeaker);
+router.delete("/delete/:id",auth, deleteSpeaker);
 
 module.exports = router;

@@ -8,16 +8,19 @@ const speakerRoute = require("./router/speaker.route");
 const userRoute = require("./router/user.route");
 const organizerRoute = require("./router/organizer.route");
 const eventRoute = require("./router/event.route");
+const adminRoute = require('./router/admin.route');
 
 app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
+//for the payload size
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb' }));
 
 app.use("/api/speakers",speakerRoute)
 app.use("/api/user",userRoute)
 app.use("/api/organizers",organizerRoute)
 app.use("/api/event",eventRoute)
+app.use("/api/admin",adminRoute)
+
 
 
 

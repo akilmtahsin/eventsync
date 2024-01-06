@@ -14,21 +14,9 @@ const auth = (req, res, next ) => {
       req.userId = user.id;
       req.userRole = user.role;
 
-      // if (user.role === 'user') {
-      //   req.userId = user.id;
-      //   req.uid = user.id;
-     
-        
-      // } else if (user.role === 'organizer') {
-        
-      //   req.organizerId = user.id;
-      //   req.uid = user.id;
-      // }
-      // else if (user.role === 'admin') {
-        
-      //   req.adminId = user.id;
-      //   req.uid = user.id;
-      // }
+   
+
+      
       
     } else {
       res.status(401).json({message: "Unauthorized"})

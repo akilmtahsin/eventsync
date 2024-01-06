@@ -21,7 +21,7 @@ const NavBar = () => {
    
 
   return (
-    <div className="sticky top-0 z-[1000] font-display flex justify-between items-center h-16 w-screen max-w-full mx-auto px-4 py-2 backdrop-blur-lg">
+    <div className="sticky top-0 z-[1000] font-display flex justify-between items-center h-16 w-screen max-w-full mx-auto px-4 py-2 bg-white drop-shadow-lg">
       <Link to="/">
         <img src="/EventSync.png" alt="logo" className="ml-5 h-12 w-auto" />
       </Link>

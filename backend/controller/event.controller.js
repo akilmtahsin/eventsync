@@ -1,6 +1,4 @@
 const Event = require("../model/event.model");
-const Speaker = require("../model/speaker.model");
-
 
 const createEvent = async (req, res) => {
   try {
@@ -12,17 +10,24 @@ const createEvent = async (req, res) => {
       paymentAmount,
       eventVenue,
       eventVacancy,
-      eventDate,
+      eventStart,
+      eventEnd,
       eventBannerUrl,
       status,
+      speakers, // Array of speakers
     } = req.body;
 
-    const organizerId = req.organizerId;
+    let organizerId;
 
-    console.log(organizerId);
+    if (req.userRole === 'organizer') {
+      organizerId = req.userId;
+    } else {
+      res.status(403).json({ message: 'Access forbidden. User is not an organizer.' });
+      return; // Exit the function if not an organizer
+    }
 
-    if(!organizerId){
-      return res.status(403).json({message: "Not Authorized"});
+    if (!organizerId) {
+      return res.status(403).json({ message: "Not Authorized" });
     }
 
     // Create Event document with speaker references
@@ -34,11 +39,14 @@ const createEvent = async (req, res) => {
       paymentAmount,
       eventVenue,
       eventVacancy,
-      eventDate,
-      eventBannerUrl, 
+      eventStart,
+      eventEnd,
+      eventBannerUrl,
       organizer: organizerId,
       status,
+      speakers, // Include the array of speakers
     });
+
     res.status(201).json({ event: createdEvent });
   } catch (error) {
     console.error(error);

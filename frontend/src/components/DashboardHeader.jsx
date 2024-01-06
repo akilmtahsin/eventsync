@@ -1,6 +1,14 @@
+import { useEffect, useState } from 'react';
 import DropdownUser from './DropDownUser';
+import { cookies } from '../../config/cookies';
 
 const DashboardHeader = () => {
+
+ 
+
+ 
+ 
+
   return (
     <header className="sticky top-0 z-50 flex w-full bg-white drop-shadow-md dark:bg-boxdark dark:drop-shadow-none">
       <div className="flex flex-grow items-center justify-between py-4 px-4 shadow-2 md:px-6 2xl:px-11">
@@ -34,8 +42,9 @@ const DashboardHeader = () => {
         </div>
 
         <div className="flex items-center gap-3 2xsm:gap-7">
-          <DropdownUser />
+        <DropdownUser />
         </div>
+        
       </div>
     </header>
   );

@@ -1,31 +1,155 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { cookies } from '../../../config/cookies';
+import imageCompression from 'browser-image-compression';
+import toast from 'react-hot-toast';
 
 export default function EventCreationForm() {
-  const [speakers, setSpeakers] = useState([{ name: '', designation: '' }]);
+  const [speakers, setSpeakers] = useState([{ id: '', name: '', designation: '' }]);
   const [paymentStatus, setPaymentStatus] = useState('');
   const [paymentAmount, setPaymentAmount] = useState('');
+  const [formData, setFormData] = useState({
+    eventName: '',
+    eventDetails: '',
+    eventType: '',
+    paymentStatus: 'unpaid',
+    paymentAmount: '0',
+    eventVenue: '',
+    eventVacancy: '',
+    eventStart: '',
+    eventEnd: '',
+    eventBannerUrl: '',
+    speakers: [],
+  });
 
-  const handlePaymentStatusChange = (value) => {
-    setPaymentStatus(value);
-    setPaymentAmount('');
+  const handlePaymentChange = (e, fieldName) => {
+    if (fieldName === 'paymentStatus') {
+      setPaymentStatus(e.target.value);
+      // If payment status is changed, reset payment amount
+      setPaymentAmount('');
+    }
+
+    if (fieldName === 'paymentAmount') {
+      setPaymentAmount(e.target.value);
+    }
+
+    setFormData({
+      ...formData,
+      [fieldName]: e.target.value,
+    });
   };
 
-  const handleAddSpeaker = () => {
-    setSpeakers([...speakers, { name: '', designation: '' }]);
+  const handleAddSpeakerRow = () => {
+    setSpeakers([...speakers, { name: '' }]);
   };
 
-  const handleSpeakerChange = (index, field, value) => {
+  const handleSpeakerChange = (index, { id, name, designation }) => {
     const updatedSpeakers = [...speakers];
-    updatedSpeakers[index][field] = value;
+    updatedSpeakers[index] = { id, name, designation };
     setSpeakers(updatedSpeakers);
+
+    console.log(updatedSpeakers)
+   
   };
 
-  const handleSubmit = (e) => {
+  const handleImageFileChange = async (event) => {
+    const file = event.target.files?.[0];
+
+    if (file) {
+      try {
+        // Set options for image compression
+        const options = {
+          maxSizeMB: 0.1,
+          maxWidthOrHeight: 800,
+          useWebWorker: true,
+        };
+
+        // Compress the image
+        const compressedFile = await imageCompression(file, options);
+
+        // Convert compressed image to base64
+        const reader = new FileReader();
+
+        reader.onload = (e) => {
+          const eventBannerUrl = e.target?.result;
+          setFormData({
+            ...formData,
+            eventBannerUrl: eventBannerUrl,
+          });
+        };
+
+        reader.readAsDataURL(compressedFile);
+      } catch (error) {
+        console.error('Error compressing image:', error);
+      }
+    }
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Perform form submission logic here
 
-    // Reset the form state if needed
+    try {
+      const response = await fetch(
+        'http://localhost:8000/api/event/create-event',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            authorization: `Bearer ${cookies.get('user_token')}`,
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      if (response.ok) {
+        const responseData = await response.json();
+        console.log('Successful response:', responseData);
+        toast.success('Successfully Created Event');
+      } else {
+        console.error('Error:', response.statusText);
+        toast.error('Event Creation Failed');
+      }
+    } catch (error) {
+      console.error('Error:', error.message);
+      // Handle error, show error message, etc.
+    }
   };
+
+  const [data, setData] = useState([]);
+
+  const handleInputChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  //fetching speaker information
+  useEffect(() => {
+    const fetchSpeakers = async () => {
+      try {
+        const response = await fetch('http://localhost:8000/api/speakers/all', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            authorization: `Bearer ${cookies.get('user_token')}`,
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setData(data);
+
+          console.log(data);
+        }
+        console.error('Error fetching speaker data:', response.statusText);
+      } catch (error) {
+        console.error('Error fetching speaker data:', error.message);
+      }
+    };
+
+    fetchSpeakers();
+  }, []);
+
   return (
     <>
       <div className="bg-white flex flex-col shadow-lg p-10">
@@ -46,6 +170,9 @@ export default function EventCreationForm() {
                     placeholder="Edit Name"
                     required
                     className="w-full rounded border-[1.5px] border-solid bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-red-600 disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                    name="eventName"
+                    value={formData.eventName}
+                    onChange={handleInputChange}
                   />
                 </div>
               </div>
@@ -60,6 +187,9 @@ export default function EventCreationForm() {
                     type="text"
                     placeholder="Edit Details"
                     className="w-full rounded border-[1.5px] border-solid bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-red-600 disabled:cursor-default disabled:bg-white "
+                    name="eventDetails"
+                    value={formData.eventDetails}
+                    onChange={handleInputChange}
                   />
                 </div>
               </div>
@@ -73,6 +203,9 @@ export default function EventCreationForm() {
                   <select
                     required
                     className="w-full rounded border-[1.5px] border-solid bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-red-600 disabled:cursor-default disabled:bg-white"
+                    name="eventType"
+                    onChange={handleInputChange}
+                    value={formData.eventType}
                   >
                     <option value="seminar">Seminar</option>
                     <option value="webinar">Webinar</option>
@@ -89,12 +222,13 @@ export default function EventCreationForm() {
                   </label>
                   <select
                     className="w-full rounded border-[1.5px] border-solid bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-red-600 disabled:cursor-default disabled:bg-white"
-                    onChange={(e) => handlePaymentStatusChange(e.target.value)}
                     required
+                    name="paymentStatus"
                     value={paymentStatus}
+                    onChange={(e) => handlePaymentChange(e, 'paymentStatus')}
                   >
-                    <option value="paid">Paid</option>
                     <option value="unpaid">Unpaid</option>
+                    <option value="paid">Paid</option>
                   </select>
                 </div>
                 {paymentStatus === 'paid' && (
@@ -108,7 +242,8 @@ export default function EventCreationForm() {
                       required
                       className="w-full rounded border-[1.5px] border-solid bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-red-600 disabled:cursor-default disabled:bg-white"
                       value={paymentAmount}
-                      onChange={(e) => setPaymentAmount(e.target.value)}
+                      onChange={(e) => handlePaymentChange(e, 'paymentAmount')}
+                      name="paymentAmount"
                     />
                   </div>
                 )}
@@ -125,6 +260,63 @@ export default function EventCreationForm() {
                     type="text"
                     placeholder="Edit Details"
                     className="w-full rounded border-[1.5px] border-solid bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-red-600 disabled:cursor-default disabled:bg-white "
+                    name="eventVenue"
+                    value={formData.eventVenue}
+                    onChange={handleInputChange}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="p-3">
+              <div className="mb-3 flex flex-col gap-6">
+                <div className="w-full">
+                  <label className="mb-2 block text-black dark:text-white">
+                    Event Date (From)
+                  </label>
+                  <input
+                    type="datetime-local"
+                    required
+                    className="w-full rounded border-[1.5px] border-solid bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-red-600 disabled:cursor-default disabled:bg-white"
+                    name="eventStart"
+                    value={formData.eventStart}
+                    onChange={handleInputChange}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="p-3">
+              <div className="mb-3 flex flex-col gap-6">
+                <div className="w-full">
+                  <label className="mb-2 block text-black dark:text-white">
+                    Event Date (To)
+                  </label>
+                  <input
+                    type="datetime-local"
+                    required
+                    className="w-full rounded border-[1.5px] border-solid bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-red-600 disabled:cursor-default disabled:bg-white"
+                    name="eventEnd"
+                    value={formData.eventEnd}
+                    onChange={handleInputChange}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="p-3">
+              <div className="mb-3 flex flex-col gap-6">
+                <div className="w-full">
+                  <label className="mb-2 block text-black dark:text-white">
+                    Event Vacancy
+                  </label>
+                  <input
+                    type="number"
+                    placeholder="Enter Event Vacancy"
+                    required
+                    className="w-full rounded border-[1.5px] border-solid bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-red-600 disabled:cursor-default disabled:bg-white"
+                    name="eventVacancy"
+                    value={formData.eventVacancy}
+                    onChange={handleInputChange}
                   />
                 </div>
               </div>
@@ -139,37 +331,54 @@ export default function EventCreationForm() {
                     type="file"
                     placeholder="Select a photo"
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                    name="eventBannerUrl"
+                    onChange={handleImageFileChange}
                   />
                 </div>
               </div>
             </div>
-            <div className="border-2 border-blue-600 p-3 ">
-              <h4 className="mb-3 p-3 font-bold text-xl text-blue-600">
+            <fieldset className="border-2 border-blue-600 p-3">
+              <legend className="mb-3 p-3 font-bold text-xl text-blue-600">
                 Speaker Selection
-              </h4>
+              </legend>
               <div className="p-3">
                 <div className="mb-3 flex flex-col gap-6">
                   {speakers.map((speaker, index) => (
                     <div key={index} className="w-full">
                       <div className="mb-3">
                         <label className="mb-2 block text-black dark:text-white">
-                          Speaker {index + 1} Name
+                          Speaker {index + 1} 
                         </label>
                         <div>
                           <select
                             required
                             className="w-full rounded border-[1.5px] border-solid bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-red-600 disabled:cursor-default disabled:bg-white"
-                            value={speaker.name}
+                           
+                           
                             onChange={(e) =>
-                              handleSpeakerChange(index, 'name', e.target.value)
+                              handleSpeakerChange(index, {
+                                id: e.target.value.split(',')[0],
+                                name: e.target.value.split(',')[1],
+                                designation: e.target.value.split(',')[2],
+                              })
                             }
+                            name='speakers'
                           >
                             <option value="" disabled>
                               Select a speaker
                             </option>
-                            <option value="Speaker 1">Speaker 1</option>
-                            <option value="Speaker 2">Speaker 2</option>
-                          
+                            {data.map((speakerOption) => (
+                              <option
+                                key={speakerOption._id}
+                                value={`${speakerOption._id},${speakerOption.name},${speakerOption.designation}`}
+                              >
+                                <p>
+                                  {' '}
+                                  {speakerOption.name},{' '}
+                                  {speakerOption.designation}
+                                </p>
+                              </option>
+                            ))}
                           </select>
                         </div>
                       </div>
@@ -177,13 +386,13 @@ export default function EventCreationForm() {
                   ))}
                 </div>
               </div>
-            </div>
+            </fieldset>
 
             <div className="p-6 flex justify-between">
               <button
                 type="button"
                 className="bg-blue-600 text-white py-2 px-4 rounded mt-4"
-                onClick={handleAddSpeaker}
+                onClick={handleAddSpeakerRow}
               >
                 Add More Speakers
               </button>

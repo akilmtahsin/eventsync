@@ -67,9 +67,9 @@ const viewProfile = async (req, res) => {
 const updateProfile = async (req, res) => {
   try {
     const { username, email, imageUrl } = req.body;
-    const updatedUser = await User.findOne({ _id: req.userId });
+    const updatedUser = await User.findById (req.userId );
 
-    console.log(userId);
+    console.log(updatedUser);
 
     if (!updatedUser) {
       return res.status(404).json({ message: "User not found" });

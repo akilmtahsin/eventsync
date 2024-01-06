@@ -2,11 +2,12 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate} from 'react-router-dom';
 import { Avatar } from "@material-tailwind/react";
 import { cookies } from '../../config/cookies';
+import toast from 'react-hot-toast';
  
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
-  const navigate = useNavigate();
+
 
   const trigger = useRef(null);
   const dropdown = useRef(null);
@@ -43,18 +44,16 @@ const DropdownUser = () => {
     };
 
     fetchUserProfile();
-  }, []);
+  }, [token]);
 
 
-  const handleLogout = () => {
-    console.log('Logging out...');
-  
-    // Clear the user's authentication token using AuthService
-    cookies.remove('user_token');
-  
-    console.log('Logged out successfully.');
+    const handleLogout = () => {
+
+    
+    cookies.remove ('user_token');
     window.location.reload(true)
-    navigate('/');
+    toast.success('Logged out successfully.');
+    // navigate('/');
 
   };
 

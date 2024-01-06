@@ -1,6 +1,8 @@
-import { Avatar } from '@material-tailwind/react';
+import { Avatar, Button } from '@material-tailwind/react';
 import { useEffect, useState } from 'react';
 import { cookies } from '../../config/cookies';
+import toast from 'react-hot-toast';
+import imageCompression from 'browser-image-compression';
 
 const Profile = () => {
   const token = cookies.get('user_token');
@@ -24,7 +26,7 @@ const Profile = () => {
         });
 
         if (response.ok) {
-          const data = await res.json();
+          const data = await response.json();
           setFormData({
             imageUrl: data.imageUrl,
             username: data.username,
@@ -40,19 +42,36 @@ const Profile = () => {
     fetchUserProfile();
   }, []);
 
-  const handleImageChange = (event) => {
+  const handleImageChange = async(event) => {
     const file = event.target.files?.[0];
+    
     if (file) {
-      const reader = new FileReader();
+      try {
+        // Set options for image compression
+        const options = {
+          maxSizeMB: 0.01,
+          maxWidthOrHeight: 800,
+          useWebWorker: true,
+        };
 
-      reader.onload = (e) => {
-        const imageUrl = e.target?.result;
-        setFormData({
-          ...formData,
-          imageUrl,
-        });
-      };
-      reader.readAsDataURL(file);
+        // Compress the image
+        const compressedFile = await imageCompression(file, options);
+
+        // Convert compressed image to base64
+        const reader = new FileReader();
+
+        reader.onload = (e) => {
+          const imageUrl = e.target?.result;
+          setFormData({
+            ...formData,
+            imageUrl,
+          });
+        };
+
+        reader.readAsDataURL(compressedFile);
+      } catch (error) {
+        console.error('Error compressing image:', error);
+      }
     }
   };
 
@@ -69,9 +88,12 @@ const Profile = () => {
       });
 
       if (response.ok) {
-        console.log('Profile updated successfully');
+        toast.success('Successfully updated user profile.');
+        window.location.reload(true);
+       
       } else {
         console.error('Error updating user profile:', response.statusText);
+        toast.error('Error updating user info')
       }
     } catch (error) {
       console.error('Error updating user profile:', error.message);
@@ -90,15 +112,15 @@ const Profile = () => {
   };
 
   return (
-    <>
+    <div>
       <div className="bg-white flex flex-col shadow-lg p-10">
         <div className="flex flex-row items-center justify-between">
           <h1 className="font-display font-medium tracking-tighter text-blue-600 text-3xl p-10">
             User Information
           </h1>
-          <button
+          <Button
             onClick={handleProfileUpdate}
-            className=" h-16 text-lg bg-green-800 hover:opacity-90 flex gap-x-3 items-center -z-4 "
+            className=" h-10 text-md bg-green-800 hover:opacity-90 flex gap-x-3 items-center -z-4"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -115,108 +137,91 @@ const Profile = () => {
               />
             </svg>
             Edit Info
-          </button>
-
-          <div className="p-10 overflow-hidden rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-            <div className="mt-45 px-4 pb-6 text-center lg:pb-8 xl:pb-11.5">
-              <div className="relative z-30 mx-auto -mt-22 h-30 w-full max-w-30 rounded-full bg-white/20 p-1 backdrop-blur sm:h-44 sm:max-w-44 sm:p-3">
-                <div className="relative drop-shadow-2">
-                  <Avatar src={formData.imageUrl} alt="avatar" size="xxl" />
-                </div>
-              </div>
-              <div className="mt-4">
-                <h3 className="mb-1.5 text-2xl font-semibold text-black dark:text-white">
-                  {formData.username}
-                </h3>
-                <h4 className="mb-1.5 text-sm font-semibold text-blue-gray-800">
-                  {formData.email}
-                </h4>
-
-                <div className="mx-auto mt-4.5 mb-5.5 grid max-w-94 grid-cols-2 rounded-md border border-stroke py-2.5 shadow-1 dark:border-strokedark dark:bg-[#37404F]">
-                  <div className="flex flex-col items-center justify-center gap-1 border-r border-stroke px-4 dark:border-strokedark xsm:flex-row">
-                    <span className="px-3 font-semibold text-black dark:text-white">
-                      10
-                    </span>
-                    <span className="text-sm">Event Enrolled</span>
-                  </div>
-                  <div className="flex flex-col items-center justify-center gap-1 border-r border-stroke px-4 dark:border-strokedark xsm:flex-row">
-                    <span className="px-3 font-semibold text-black dark:text-white">
-                      2
-                    </span>
-                    <span className="text-sm">Event Attended</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          </Button>
         </div>
-      </div>
 
-      <form handleSubmit={handleSubmit}>
-        <div className="p-6.5">
-          <div className="mb-4.5 flex flex-col gap-6">
-            <div className="w-full">
-              <label className="mb-2.5 block text-black dark:text-white">
-                User Name
-              </label>
-              <input
-                type="text"
-                placeholder="Edit your name"
-                className="w-full rounded border-[1.5px] border-solid bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-red-600 disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                value={formData.username}
-                onChange={handleInputFieldChange}
-                name="username"
-                disabled={isFormDisabled}
-              />
-            </div>
-          </div>
-        </div>
-        <div className="p-6.5">
-          <div className="mb-4.5 flex flex-col gap-6">
-            <div className="w-full">
-              <label className="mb-2.5 block text-black dark:text-white">
-                Email
-              </label>
-              <input
-                type="email"
-                placeholder="Edit your email"
-                className="w-full rounded border-[1.5px] border-solid bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-red-600 disabled:cursor-default disabled:bg-white "
-                value={formData.email}
-                onChange={handleInputFieldChange}
-                name="email"
-                disabled={isFormDisabled}
-              />
-            </div>
-          </div>
-        </div>
-        <div className="p-6.5">
-          <div className="mb-4.5 flex flex-col gap-6">
-            <div className="w-full">
-              <label className="mb-2.5 block text-black dark:text-white">
-                Photo
-              </label>
-              <input
-                type="file"
-                placeholder="Select a photo"
-                className="w-full rounded border-none bg-transparent py-3 px-5 font-medium outline-none transition active:border-blue-600 disabled:cursor-default disabled:bg-whiter focus:outline-blue-600 outline-blue-gray-600"
-                onChange={handleInputFieldChange}
-                disabled={isFormDisabled}
-              />
-              <img
+        <form onSubmit={handleSubmit}>
+
+          <div className='flex justify-center'>
+            <div className="relative drop-shadow-2 w-36 flex justify-center mb-4">
+              <Avatar
+              size='xxl'
                 src={formData.imageUrl}
                 alt="Preview"
-                style={{
-                  maxWidth: '100%',
-                  maxHeight: '100px',
-                  marginTop: '10px',
-                }}
+            
               />
+             { !isFormDisabled && ( <label
+                
+                htmlFor="profile"
+                className="absolute bottom-0 right-0 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-black text-white hover:bg-opacity-90 sm:bottom-2 sm:right-2"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-6 h-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6.827 6.175A2.31 2.31 0 0 1 5.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 0 0-1.134-.175 2.31 2.31 0 0 1-1.64-1.055l-.822-1.316a2.192 2.192 0 0 0-1.736-1.039 48.774 48.774 0 0 0-5.232 0 2.192 2.192 0 0 0-1.736 1.039l-.821 1.316Z"
+                  />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M16.5 12.75a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0ZM18.75 10.5h.008v.008h-.008V10.5Z"
+                  />
+                </svg>
+                <input
+                  type="file"
+                  name="profile"
+                  id="profile"
+                  className="sr-only"
+                  onChange={handleImageChange}
+                  disabled={isFormDisabled}
+                />
+              </label>)}
             </div>
           </div>
-        </div>
-        <button type="submit">Submit</button>
-      </form>
-    </>
+          <div className="p-6.5">
+            <div className="mb-4.5 flex flex-col gap-6">
+              <div className="w-full">
+                
+                <input
+                  type="text"
+                  className="w-full rounded bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-red-600 disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                  value={formData.username}
+                  onChange={handleInputFieldChange}
+                  name="username"
+                  disabled={isFormDisabled}
+                    
+                />
+              </div>
+            </div>
+          </div>
+          <div className="p-6.5 mt-3">
+            <div className="mb-4.5 flex flex-col gap-6">
+              <div className="w-full">
+                
+                <input
+                  type="email"
+                
+                  className="w-full rounded border-[1.5px] border-solid bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-red-600 disabled:cursor-default disabled:bg-white "
+                  value={formData.email}
+                  onChange={handleInputFieldChange}
+                  name="email"
+                  disabled={isFormDisabled}
+                />
+              </div>
+            </div>
+          </div>
+         
+          <div className='flex justify-end'><Button className='mt-4 ' hidden={isFormDisabled} type="submit">Submit</Button></div>
+        </form>
+      </div>
+    </div>
   );
 };
 
