@@ -4,7 +4,8 @@ import imageCompression from 'browser-image-compression';
 import toast from 'react-hot-toast';
 
 export default function EventCreationForm() {
-  const [speakers, setSpeakers] = useState([{ id: '', name: '', designation: '' }]);
+  const [speakers, setSpeakers] = useState([{ name: '', designation: '' }]);
+  const [selectedSpeakerName, setSelectedSpeakerName] = useState('');
   const [paymentStatus, setPaymentStatus] = useState('');
   const [paymentAmount, setPaymentAmount] = useState('');
   const [formData, setFormData] = useState({
@@ -38,17 +39,18 @@ export default function EventCreationForm() {
     });
   };
 
-  const handleAddSpeakerRow = () => {
-    setSpeakers([...speakers, { name: '' }]);
+  const handleAddSpeaker = () => {
+    setSpeakers([...speakers, { name: '', designation: '' }]);
   };
 
   const handleSpeakerChange = (index, { id, name, designation }) => {
     const updatedSpeakers = [...speakers];
     updatedSpeakers[index] = { id, name, designation };
     setSpeakers(updatedSpeakers);
-
-    console.log(updatedSpeakers)
-   
+    setFormData({
+      ...formData,
+      speakers: updatedSpeakers,
+    });
   };
 
   const handleImageFileChange = async (event) => {
@@ -73,7 +75,7 @@ export default function EventCreationForm() {
           const eventBannerUrl = e.target?.result;
           setFormData({
             ...formData,
-            eventBannerUrl: eventBannerUrl,
+            eventBannerUrl,
           });
         };
 
@@ -332,7 +334,7 @@ export default function EventCreationForm() {
                     placeholder="Select a photo"
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     name="eventBannerUrl"
-                    onChange={handleImageFileChange}
+                    onClick={handleImageFileChange}
                   />
                 </div>
               </div>
@@ -347,24 +349,26 @@ export default function EventCreationForm() {
                     <div key={index} className="w-full">
                       <div className="mb-3">
                         <label className="mb-2 block text-black dark:text-white">
-                          Speaker {index + 1} 
+                          Speaker {index + 1}
                         </label>
                         <div>
                           <select
                             required
                             className="w-full rounded border-[1.5px] border-solid bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-red-600 disabled:cursor-default disabled:bg-white"
-                           
-                           
-                            onChange={(e) =>
+                            onChange={(e) => {
+                              const selectedValue = e.target.value;
+                              const [, selectedName] = selectedValue.split(',');
+
                               handleSpeakerChange(index, {
-                                id: e.target.value.split(',')[0],
-                                name: e.target.value.split(',')[1],
-                                designation: e.target.value.split(',')[2],
-                              })
-                            }
-                            name='speakers'
+                                id: selectedValue.split(',')[0],
+                                name: selectedValue.split(',')[1],
+                                designation: selectedValue.split(',')[2],
+                              });
+                            }}
+                            name="speaker"
+                            value={speakers[index].id || ''}
                           >
-                            <option value="" disabled>
+                            <option value="" disabled={!speakers[index].id}>
                               Select a speaker
                             </option>
                             {data.map((speakerOption) => (
@@ -372,11 +376,8 @@ export default function EventCreationForm() {
                                 key={speakerOption._id}
                                 value={`${speakerOption._id},${speakerOption.name},${speakerOption.designation}`}
                               >
-                                <p>
-                                  {' '}
-                                  {speakerOption.name},{' '}
-                                  {speakerOption.designation}
-                                </p>
+                                {speakerOption.name},{' '}
+                                {speakerOption.designation}
                               </option>
                             ))}
                           </select>
@@ -392,7 +393,7 @@ export default function EventCreationForm() {
               <button
                 type="button"
                 className="bg-blue-600 text-white py-2 px-4 rounded mt-4"
-                onClick={handleAddSpeakerRow}
+                onClick={handleAddSpeaker}
               >
                 Add More Speakers
               </button>
