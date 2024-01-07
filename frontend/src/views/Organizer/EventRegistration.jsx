@@ -3,9 +3,10 @@ import { cookies } from '../../../config/cookies';
 import imageCompression from 'browser-image-compression';
 import toast from 'react-hot-toast';
 
+
+
 export default function EventCreationForm() {
-  const [speakers, setSpeakers] = useState([{ name: '', designation: '' }]);
-  const [selectedSpeakerName, setSelectedSpeakerName] = useState('');
+  const [speakers, setSpeakers] = useState([{ id: '', name: '', designation: '' }]);
   const [paymentStatus, setPaymentStatus] = useState('');
   const [paymentAmount, setPaymentAmount] = useState('');
   const [formData, setFormData] = useState({
@@ -21,6 +22,14 @@ export default function EventCreationForm() {
     eventBannerUrl: '',
     speakers: [],
   });
+
+  const [selectedSpeaker, setSelectedSpeaker] = useState([]);
+  const handleSelectedSpeaker = (index, speakerId) => {
+    const list = [...selectedSpeaker];
+    list[index] = speakerId;
+    setSelectedSpeaker(list);
+  };
+
 
   const handlePaymentChange = (e, fieldName) => {
     if (fieldName === 'paymentStatus') {
@@ -47,10 +56,9 @@ export default function EventCreationForm() {
     const updatedSpeakers = [...speakers];
     updatedSpeakers[index] = { id, name, designation };
     setSpeakers(updatedSpeakers);
-    setFormData({
-      ...formData,
-      speakers: updatedSpeakers,
-    });
+
+    console.log(updatedSpeakers)
+   
   };
 
   const handleImageFileChange = async (event) => {
@@ -88,6 +96,7 @@ export default function EventCreationForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    formData.speakers=selectedSpeaker;
 
     try {
       const response = await fetch(
@@ -355,18 +364,16 @@ export default function EventCreationForm() {
                           <select
                             required
                             className="w-full rounded border-[1.5px] border-solid bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-red-600 disabled:cursor-default disabled:bg-white"
-                            onChange={(e) => {
-                              const selectedValue = e.target.value;
-                              const [, selectedName] = selectedValue.split(',');
-
+                           
+                           
+                            onChange={(e) =>
                               handleSpeakerChange(index, {
-                                id: selectedValue.split(',')[0],
-                                name: selectedValue.split(',')[1],
-                                designation: selectedValue.split(',')[2],
-                              });
-                            }}
-                            name="speaker"
-                            value={speakers[index].id || ''}
+                                id: e.target.value.split(',')[0],
+                                name: e.target.value.split(',')[1],
+                                designation: e.target.value.split(',')[2],
+                              })
+                            }
+                            name='speakers'
                           >
                             <option value="" disabled={!speakers[index].id}>
                               Select a speaker
@@ -374,7 +381,7 @@ export default function EventCreationForm() {
                             {data.map((speakerOption) => (
                               <option
                                 key={speakerOption._id}
-                                value={`${speakerOption._id},${speakerOption.name},${speakerOption.designation}`}
+                                value={speakerOption._id}
                               >
                                 {speakerOption.name},{' '}
                                 {speakerOption.designation}
