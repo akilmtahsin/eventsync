@@ -14,6 +14,7 @@ import  SpeakerList  from '../components/Tables/SpeakerList';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
+
 export default function EventDetails() {
   const [open, setOpen] = useState(false);
   const { id } = useParams();
