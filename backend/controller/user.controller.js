@@ -2,6 +2,8 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../model/user.model");
 const jwt_key = process.env.JWT_SECRET;
+const { validationResult } = require("express-validator");
+const { check, body } = require("express-validator");
 
 const Signup = async (req, res) => {
   const { role, username, email, password } = req.body;
@@ -45,7 +47,11 @@ const Login = async (req, res) => {
       return res.status(400).json({ message: "Invalid Credentials" });
     }
     const token = jwt.sign(
-      { role:existingUser.role, email: existingUser.email, id: existingUser._id },
+      {
+        role: existingUser.role,
+        email: existingUser.email,
+        id: existingUser._id,
+      },
       jwt_key
     );
     res.status(200).json({ message: "login success", token: token });
@@ -55,7 +61,6 @@ const Login = async (req, res) => {
 };
 
 const viewProfile = async (req, res) => {
-
   try {
     const user = await User.findOne({ _id: req.userId });
     res.status(200).json(user);
@@ -67,9 +72,7 @@ const viewProfile = async (req, res) => {
 const updateProfile = async (req, res) => {
   try {
     const { username, email, imageUrl } = req.body;
-    const updatedUser = await User.findById (req.userId );
-
-    console.log(updatedUser);
+    const updatedUser = await User.findById(req.userId);
 
     if (!updatedUser) {
       return res.status(404).json({ message: "User not found" });
@@ -79,13 +82,15 @@ const updateProfile = async (req, res) => {
     updatedUser.email = email;
     updatedUser.imageUrl = imageUrl;
 
+   
+
     await updatedUser.save();
+
     res.status(200).json({ message: "Successfully updated" });
   } catch (error) {
     console.error("Error updating profile:", error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
-
 
 module.exports = { Signup, Login, viewProfile, updateProfile };

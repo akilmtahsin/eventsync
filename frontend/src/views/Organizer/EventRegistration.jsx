@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { cookies } from '../../../config/cookies';
-import imageCompression from 'browser-image-compression';
 import toast from 'react-hot-toast';
 
 
 
+
 export default function EventCreationForm() {
+ 
   const [speakers, setSpeakers] = useState([{ id: '', name: '', designation: '' }]);
   const [paymentStatus, setPaymentStatus] = useState('');
   const [paymentAmount, setPaymentAmount] = useState('');
@@ -32,19 +33,27 @@ export default function EventCreationForm() {
 
 
   const handlePaymentChange = (e, fieldName) => {
+
+    const { value, type } = e.target;
+
+  // Ensure that the entered value is not negative for numeric input
+  const sanitizedValue = type === 'number' ? Math.max(0, parseInt(value, 10)) : value;
+
+  
+
     if (fieldName === 'paymentStatus') {
-      setPaymentStatus(e.target.value);
+      setPaymentStatus(sanitizedValue);
       // If payment status is changed, reset payment amount
       setPaymentAmount('');
     }
 
     if (fieldName === 'paymentAmount') {
-      setPaymentAmount(e.target.value);
+      setPaymentAmount(sanitizedValue);
     }
 
     setFormData({
       ...formData,
-      [fieldName]: e.target.value,
+      [fieldName]: sanitizedValue,
     });
   };
 
@@ -52,47 +61,32 @@ export default function EventCreationForm() {
     setSpeakers([...speakers, { name: '', designation: '' }]);
   };
 
-  const handleSpeakerChange = (index, { id, name, designation }) => {
-    const updatedSpeakers = [...speakers];
-    updatedSpeakers[index] = { id, name, designation };
-    setSpeakers(updatedSpeakers);
+ 
 
-    console.log(updatedSpeakers)
-   
-  };
-
-  const handleImageFileChange = async (event) => {
+  const handleImageFileChange = (event) => {
     const file = event.target.files?.[0];
-
+  
     if (file) {
       try {
-        // Set options for image compression
-        const options = {
-          maxSizeMB: 0.1,
-          maxWidthOrHeight: 800,
-          useWebWorker: true,
-        };
-
-        // Compress the image
-        const compressedFile = await imageCompression(file, options);
-
-        // Convert compressed image to base64
         const reader = new FileReader();
-
+  
         reader.onload = (e) => {
           const eventBannerUrl = e.target?.result;
-          setFormData({
+  
+          setFormData(() => ({
             ...formData,
             eventBannerUrl,
-          });
+          }));
         };
-
-        reader.readAsDataURL(compressedFile);
+  
+        reader.readAsDataURL(file);
       } catch (error) {
         console.error('Error compressing image:', error);
       }
     }
   };
+
+ 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -115,6 +109,9 @@ export default function EventCreationForm() {
         const responseData = await response.json();
         console.log('Successful response:', responseData);
         toast.success('Successfully Created Event');
+      } else if(response.status===400){
+        toast.error('Event Already Exist, Try Different Name.');``
+
       } else {
         console.error('Error:', response.statusText);
         toast.error('Event Creation Failed');
@@ -125,14 +122,21 @@ export default function EventCreationForm() {
     }
   };
 
-  const [data, setData] = useState([]);
+  
 
   const handleInputChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value, type } = e.target;
+  
+  
+    const sanitizedValue = type === 'number' ? Math.max(0, parseInt(value, 10)) : value;
+  
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: sanitizedValue,
+    }));
   };
+
+  const [data, setData] = useState([]);
 
   //fetching speaker information
   useEffect(() => {
@@ -149,17 +153,23 @@ export default function EventCreationForm() {
         if (response.ok) {
           const data = await response.json();
           setData(data);
-
-          console.log(data);
         }
+        
+        
         console.error('Error fetching speaker data:', response.statusText);
       } catch (error) {
         console.error('Error fetching speaker data:', error.message);
       }
     };
+    
 
     fetchSpeakers();
   }, []);
+
+  console.log(data)
+
+  
+
 
   return (
     <>
@@ -194,21 +204,21 @@ export default function EventCreationForm() {
                   <label className="mb-2 block text-black dark:text-white">
                     Event Details
                   </label>
-                  <input
+                  <textarea
                     type="text"
                     placeholder="Edit Details"
                     className="w-full rounded border-[1.5px] border-solid bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-red-600 disabled:cursor-default disabled:bg-white "
                     name="eventDetails"
                     value={formData.eventDetails}
                     onChange={handleInputChange}
-                  />
+                  ></textarea>
                 </div>
               </div>
             </div>
             <div className="p-3">
               <div className="mb-3 flex flex-col gap-6">
                 <div className="w-full">
-                  <label className="mb-2 block text-black dark:text-white">
+                  <label htmlFor='eventType' className="mb-2 block text-black dark:text-white">
                     Event Type
                   </label>
                   <select
@@ -220,7 +230,6 @@ export default function EventCreationForm() {
                   >
                     <option value="seminar">Seminar</option>
                     <option value="webinar">Webinar</option>
-                    <option value="conference">Conference</option>
                   </select>
                 </div>
               </div>
@@ -248,7 +257,7 @@ export default function EventCreationForm() {
                       Payment Amount
                     </label>
                     <input
-                      type="text"
+                      type="number"
                       placeholder="Enter Payment Amount"
                       required
                       className="w-full rounded border-[1.5px] border-solid bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-red-600 disabled:cursor-default disabled:bg-white"
@@ -310,6 +319,7 @@ export default function EventCreationForm() {
                     value={formData.eventEnd}
                     onChange={handleInputChange}
                   />
+                  
                 </div>
               </div>
             </div>
@@ -319,7 +329,7 @@ export default function EventCreationForm() {
                 <div className="w-full">
                   <label className="mb-2 block text-black dark:text-white">
                     Event Vacancy
-                  </label>
+                  </label>   
                   <input
                     type="number"
                     placeholder="Enter Event Vacancy"
@@ -335,16 +345,18 @@ export default function EventCreationForm() {
             <div className="p-3">
               <div className="mb-3 flex flex-col gap-6">
                 <div className="w-full">
-                  <label className="mb-2 block text-black dark:text-white">
+                  <label htmlFor='eventBannerUrl' className="mb-2 block text-black dark:text-white">
                     Event Banner
                   </label>
                   <input
                     type="file"
-                    placeholder="Select a photo"
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                    name="eventBannerUrl"
-                    onClick={handleImageFileChange}
+                    name ="eventBannerUrl"
+                    id = "eventBannerUrl"
+                    onChange={handleImageFileChange}
                   />
+                  { formData.eventBannerUrl?(<img src={formData.eventBannerUrl} alt="Banner Preview" className='h-32 w-96 object-cover mt-2'/>):( <p className='mt-2 font-semibold'>No preview available</p> )}
+
                 </div>
               </div>
             </div>
@@ -367,7 +379,7 @@ export default function EventCreationForm() {
                            
                            
                             onChange={(e) =>
-                              handleSpeakerChange(index, {
+                              handleSelectedSpeaker(index, {
                                 id: e.target.value.split(',')[0],
                                 name: e.target.value.split(',')[1],
                                 designation: e.target.value.split(',')[2],
@@ -375,7 +387,7 @@ export default function EventCreationForm() {
                             }
                             name='speakers'
                           >
-                            <option value="" disabled={!speakers[index].id}>
+                            <option value="" disabled>
                               Select a speaker
                             </option>
                             {data.map((speakerOption) => (

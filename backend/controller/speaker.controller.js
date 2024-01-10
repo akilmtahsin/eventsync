@@ -46,7 +46,7 @@ const createSpeaker = async (req, res) => {
       name: name,
       designation: designation,
       details: details,
-      imageUrl: imageUrl.Speaker,
+      imageUrl: imageUrl,
       createdBy: organizerId,
       organizerName: organizer.username
     });
@@ -83,6 +83,22 @@ const deleteSpeaker = async (req, res) => {
   }
 };
 
+const rateSpeaker = async (req, res) => {
+  try {
+    const speaker = await Speaker.findOne({ _id: req.params.id });
+    speaker.totalRatings += req.body.rating;
+    speaker.numberOfRatings += 1;
+    const averageRating = speaker.totalRatings / speaker.numberOfRatings;
+    speaker.rating = averageRating;
+
+    await speaker.save();
+
+    res.status(200).json({ message: "Speaker rating updated successfully", averageRating });
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+};
+
 //exporting the CRUD
 module.exports = {
   getAllSpeaker,
@@ -90,4 +106,5 @@ module.exports = {
   getOneSpeaker,
   updateSpeaker,
   deleteSpeaker,
+  rateSpeaker,
 };

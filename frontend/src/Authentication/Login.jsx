@@ -1,53 +1,54 @@
-import { useState } from 'react';
+
 import toast from 'react-hot-toast';
 import { Link, useNavigate } from 'react-router-dom';
 import { cookies } from '../../config/cookies';
+import LoginSchema from '../ValidationSchema/LoginValidation';
+import { useFormik } from 'formik';
 
 // const BASE_URL = import.meta.env.BASE_URL;
 
 export default function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+ 
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
+  const formik = useFormik({
+    initialValues: {
+      email: '',
+      password: '',
+    },
+    validationSchema: LoginSchema,
+    onSubmit: async (values) => {
+      try {
+        const response = await fetch(`http://localhost:8000/api/user/login`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(values),
+        });
+    
 
-    try {
-      const response = await fetch(`http://localhost:8000/api/user/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email,
-          password,
-        }),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        cookies.set('user_token', data.token);
+        if (response.ok) {
+          const data = await response.json();
+           cookies.set('user_token', data.token);
         toast.success('Successfully Logged in');
         navigate('/');
-      } else {
-        if (response.status === 404) {
-          const errorData = await response.json();
-          toast.error(errorData.message); // Assuming the error message is in the "message" field
-        } else if (response.status === 400) {
-          const errorData = await response.json();
-          toast.error(errorData.message);
         } else {
-          console.error('Login failed:', response.status);
-          toast.error('Login failed');
+          if (response.status === 400) {
+            const errorData = await response.json();
+            toast.error(response.statusText);
+            formik.setErrors(errorData.errors);
+          } else {
+            console.error('Login failed:', response.status);
+            toast.error('Login failed:', response.statusText);
+          }
         }
+      } catch (error) {
+        console.error('Login failed:', error);
+        toast.error('Login failed. Please try again later.');
       }
-    } catch (error) {
-      // Handle login failure
-      console.error('Login failed:', error);
-      toast.error('Login failed. Please check your credentials.');
-    }
-  };
+    },
+  });
 
   return (
     <>
@@ -68,7 +69,7 @@ export default function Login() {
             className="space-y-6"
             action="#"
             method="POST"
-            onSubmit={handleLogin}
+            onSubmit={formik.handleSubmit}
           >
             <div>
               <label
@@ -83,10 +84,13 @@ export default function Login() {
                   name="email"
                   type="email"
                   autoComplete="email"
-                  required
+                  
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={formik.handleChange}
                 />
+                  {formik.touched.email && formik.errors.email && (
+            <div className="text-red-500 mt-1">{formik.errors.email}</div>
+          )}
               </div>
             </div>
 
@@ -98,29 +102,21 @@ export default function Login() {
                 >
                   Password
                 </label>
-                <div className="text-sm">
-                  <a
-                    href=""
-                    className="font-semibold text-indigo-600 hover:text-indigo-500"
-                    onClick={(event) => {
-                      event.preventDefault();
-                      toast.error('Feature not added.');
-                    }}
-                  >
-                    Forgot password?
-                  </a>
-                </div>
+                
               </div>
               <div className="mt-2">
                 <input
                   id="password"
                   name="password"
                   type="password"
-                  autoComplete="current-password"
-                  required
+                  
+                  
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={formik.handleChange}
                 />
+                  {formik.touched.password && formik.errors.password && (
+            <div className="text-red-500 mt-1">{formik.errors.password}</div>
+          )}
               </div>
             </div>
 

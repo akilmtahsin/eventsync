@@ -6,33 +6,42 @@ import {
   Typography,
   Button
 } from "@material-tailwind/react";
+
 import { NavLink } from "react-router-dom";
- 
-export function EventCard() {
+
+function EventCard({ id, eventName, eventVenue, eventBannerUrl, eventStart }) {
+
+  const formattedDate = new Date(eventStart).toLocaleDateString('en-US', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric'
+  });
+
   return (
-    <Card className="max-w-[24rem] overflow-hidden m-7 ">
+    <Card className="max-w-[24rem] max-h-[24rem] overflow-hidden m-7">
       <CardHeader
         floated={false}
         shadow={false}
         color="transparent"
-        className="m-0 rounded-none"
-      >   
+        className="m-0 rounded-none min-h-[10rem] max-h-[10rem]"
+        
+      >
         <img
-          src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1471&q=80"
-          alt="ui/ux review check"
+          src={eventBannerUrl}
+          alt="Banner"
         />
       </CardHeader>
-      <CardBody>
+      <CardBody className="min-h-[10rem]">
         <Typography variant="h4" color="blue-gray">
-          Event Name
+          {eventName}
         </Typography>
         <Typography variant="lead" color="gray" className="mt-3 font-normal">
-         IUBAT, Dhaka
+          {eventVenue}
         </Typography>
       </CardBody>
       <CardFooter className="flex items-center justify-between">
-      <Typography className="font-normal">January 10</Typography>
-      <NavLink to='/events/details' className="inline-block align">
+        <Typography className="font-normal">{formattedDate}</Typography>
+        <NavLink to={`/events/details/${id}`} className="inline-block">
           <Button size="sm" variant="text" className="flex items-center gap-2">
             Learn More
             <svg
@@ -55,3 +64,5 @@ export function EventCard() {
     </Card>
   );
 }
+
+export default EventCard;

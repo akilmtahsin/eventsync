@@ -38,6 +38,8 @@ import RejectedEvents from './views/Organizer/RejectedEvents';
 import OngoingEvents from './views/Organizer/OngoingEvents';
 import CheckoutPage from './views/Checkoutpage';
 import SpeakerRegistration from './views/Organizer/SpeakerRegistration';
+import AuthGuard from './Authentication/AuthGuard';
+import ViewTickets from './views/User/ViewTickets';
 // import DashboardRoute from './Routes/DashboardRoute';
 
 // const DashboardRoute = ({ element, userRole, allowedRoles }) => {
@@ -66,18 +68,8 @@ const publicRoutes = [
   },
 
   {
-    path: '/events/details',
+    path: '/events/details/:id',
     component: EventDetails,
-  },
-
-  {
-    path: '/auth/login',
-    component: Login,
-  },
-
-  {
-    path: '/auth/signup',
-    component: SignUp,
   },
 
   {
@@ -88,6 +80,10 @@ const publicRoutes = [
   {
     path: '/checkout',
     component: CheckoutPage,
+  },
+  {
+    path: '/ticket/view/:ticketId',
+    component: ViewTickets,
   },
 
   {
@@ -129,9 +125,17 @@ function App() {
         containerClassName="overflow-auto"
       />
       <Routes>
-        <Route path="/auth/login" element={<Login />} />
-        <Route path="/auth/login" element={<Login />} />
-        <Route path="/auth/signup" element={<SignUp />} />
+      <Route
+          path="/auth/*"
+          element={
+            <AuthGuard>
+              <Routes>
+                <Route path="/login" element={<Login />} />
+                <Route path="/signup" element={<SignUp />} />
+              </Routes>
+            </AuthGuard>
+          }
+        />
         <Route
           path="/dashboard"
           element={

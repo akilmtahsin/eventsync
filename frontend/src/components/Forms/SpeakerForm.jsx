@@ -19,17 +19,13 @@ const SpeakerForm = () => {
 
     if (file) {
       try {
-        // Set options for image compression
-        const options = {
-          maxSizeMB: 0.1,
-          maxWidthOrHeight: 800,
-          useWebWorker: true,
-        };
+       
+       
 
-        // Compress the image
-        const compressedFile = await imageCompression(file, options);
+     
+       
 
-        // Convert compressed image to base64
+
         const reader = new FileReader();
 
         reader.onload = (e) => {
@@ -40,7 +36,7 @@ const SpeakerForm = () => {
           });
         };
 
-        reader.readAsDataURL(compressedFile);
+        reader.readAsDataURL(file);
       } catch (error) {
         console.error('Error compressing image:', error);
       }

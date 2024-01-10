@@ -14,8 +14,19 @@ const speakerSchema = mongoose.Schema({
     type: String
 
   },
+  totalRating: {
+    type: Number,
+    default: 0,
+   
+  },
+  numberOfRatings: {
+    type: Number,
+    default: 0,
+   
+  },
   rating: {
-    type: Number
+    type: Number,
+    default: 0,
    
   },
   imageUrl: {

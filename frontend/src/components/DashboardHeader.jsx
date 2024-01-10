@@ -13,7 +13,7 @@ const DashboardHeader = () => {
     <header className="sticky top-0 z-50 flex w-full bg-white drop-shadow-md dark:bg-boxdark dark:drop-shadow-none">
       <div className="flex flex-grow items-center justify-between py-4 px-4 shadow-2 md:px-6 2xl:px-11">
         <div className="hidden sm:block">
-          <form action="https://formbold.com/s/unique_form_id" method="POST">
+          <form action="https://formbold.com/s/unique_form_id" className='hidden' method="POST">
             <div className="relative ">
               <button className="absolute top-1/2 left-0 -translate-y-1/2">
                 <svg

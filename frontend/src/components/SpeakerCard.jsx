@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
   Card,
   CardHeader,
@@ -10,10 +11,16 @@ import {
   DialogFooter,
   Button,
   Avatar,
-} from "@material-tailwind/react";
-import { useState } from "react";
+} from '@material-tailwind/react';
 
-export function SpeakerCard() {
+const SpeakerCard = ({
+  imageUrl,
+  name,
+  designation,
+  rating,
+  numberOfRatings,
+  details,
+}) => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(!open);
 
@@ -21,20 +28,17 @@ export function SpeakerCard() {
     <div>
       <Card
         onClick={handleOpen}
-        className="w-56 cursor-pointer hover:bg-blue-100 "
+        className="w-56 h-96 cursor-pointer hover:bg-blue-100 "
       >
         <CardHeader floated={false} className="h-36 object-cover shadow-none">
-          <img
-            src="/Images/dp.jpg"
-            alt="profile-picture"
-          />
+          <img src={imageUrl} alt="profile-picture" />
         </CardHeader>
         <CardBody className="text-center">
           <Typography variant="h5" color="blue-gray" className="mb-2">
-            Natalie Paisley
+            {name}
           </Typography>
           <Typography color="blue-gray" className="font-medium" textGradient>
-            CEO / Co-Founder
+            {designation}
           </Typography>
         </CardBody>
         <CardFooter className="flex justify-center gap-7 pt-2">
@@ -57,25 +61,16 @@ export function SpeakerCard() {
                 clipRule="evenodd"
               />
             </svg>
-            5.0
+            {rating} ({numberOfRatings})
           </Typography>
         </CardFooter>
       </Card>
       <Dialog open={open} handler={handleOpen}>
         <div className="flex flex-col items-center">
-          <DialogHeader className="text-center">SpeakerName</DialogHeader>
-          <Avatar
-            src="https://docs.material-tailwind.com/img/face-2.jpg"
-            alt="avatar"
-            size="xxl"
-          />
+          <DialogHeader className="text-center">{name}</DialogHeader>
+          <Avatar src={imageUrl} alt="avatar" size="xxl" />
         </div>
-        <DialogBody>
-          Speaker Details Lorem ipsum dolor, sit amet consectetur adipisicing
-          elit. Omnis dicta laudantium doloremque soluta mollitia. Aspernatur
-          neque magnam est quaerat consequuntur exercitationem vitae fuga
-          tempora, qui, nulla ipsam ea dicta, accusantium libero sint!
-        </DialogBody>
+        <DialogBody>{details}</DialogBody>
         <DialogFooter>
           <Button variant="gradient" color="green" onClick={handleOpen}>
             <span>Close</span>
@@ -84,4 +79,10 @@ export function SpeakerCard() {
       </Dialog>
     </div>
   );
-}
+};
+
+
+
+export default SpeakerCard;
+
+

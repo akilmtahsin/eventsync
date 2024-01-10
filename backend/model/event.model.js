@@ -14,7 +14,7 @@ const eventSchema = mongoose.Schema({
   },
   eventType: {
     type: String,
-    enum: ["seminar", "webinar", "conference"],
+    enum: ["seminar", "webinar"],
     required: true,
   },
   eventDetails: {
@@ -22,8 +22,7 @@ const eventSchema = mongoose.Schema({
   },
   eventBannerUrl: {
     type: String,
-    default:
-      "https://images.unsplash.com/photo-1682407186023-12c70a4a35e0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2832&q=80",
+   
   },
   paymentStatus: {
     type: String,
@@ -46,6 +45,7 @@ const eventSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  
   eventVacancy: {
     type: Number,
     required: true,
@@ -55,11 +55,24 @@ const eventSchema = mongoose.Schema({
     enum: ["pending", "approved", "rejected"],
     default: "pending",
   },
+  isFeatured: {
+    type: Boolean,
+    default: false,
+  },
   speakers: [speakerSchema],
   organizer: {
     type: String,
     required: true,
   },
+  createdBy: {
+    type: String
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+
+  tickets: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Ticket' }]
 });
 
 const Event = mongoose.model("Event", eventSchema);

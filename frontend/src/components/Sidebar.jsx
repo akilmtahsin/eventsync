@@ -59,15 +59,6 @@ const Sidebar = () => {
                   Rejected Events
                 </NavLink>
               </li>
-              
-              <li>
-                <NavLink
-                  to="/dashboard/events"
-                  className="group relative flex items-center gap-2.5 rounded-lg py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-blue-800/30 "
-                >
-                  All Events
-                </NavLink>
-              </li>
               <li>
                 <NavLink
                   to="/dashboard/payments"
@@ -120,6 +111,15 @@ const Sidebar = () => {
                  Create New Event
                 </NavLink>
               </li>
+              <li>
+                <NavLink
+                  to="/dashboard/organizer/speaker/create"
+                  className="group relative flex items-center gap-2.5 rounded-lg py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-blue-800/30 "
+                >
+                 Create New Speaker
+                </NavLink>
+              </li>
+
 
               <li>
                 <NavLink

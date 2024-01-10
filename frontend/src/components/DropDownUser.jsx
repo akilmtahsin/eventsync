@@ -47,14 +47,15 @@ const DropdownUser = () => {
   }, [token]);
 
 
-    const handleLogout = () => {
-
-    
-    cookies.remove ('user_token');
-    window.location.reload(true)
-    toast.success('Logged out successfully.');
-    // navigate('/');
-
+  const handleLogout = async () => {
+    try {
+      await cookies.remove('user_token');
+      toast.success('Logged out successfully.');
+      window.location.reload(true);
+    } catch (error) {
+      console.error('Logout failed:', error);
+      toast.error('Logout failed. Please try again.');
+    }
   };
 
   // close on click outside

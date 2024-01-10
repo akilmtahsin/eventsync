@@ -1,15 +1,79 @@
-import { Chip, Dialog, DialogHeader, DialogFooter, DialogBody,Avatar, Button } from "@material-tailwind/react";
-import { PricingCard } from "../components/Pricing";
-import { SpeakerList } from "../components/Tables/SpeakerList";
-import { useState } from "react";
+// import {
+//   Chip,
+//   Dialog,
+//   DialogHeader,
+//   DialogFooter,
+//   DialogBody,
+//   Avatar,
+//   Button,
+// } from '@material-tailwind/react';
+
+import { Chip } from '@material-tailwind/react';
+import { PricingCard } from '../components/Pricing';
+import  SpeakerList  from '../components/Tables/SpeakerList';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 export default function EventDetails() {
   const [open, setOpen] = useState(false);
+  const { id } = useParams();
+  const [data, setData] = useState({});
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:8000/api/admin/get-event/${id}`,
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
+        );
+
+        if (response.ok) {
+          const eventData = await response.json();
+          setData(eventData);
+          
+        }
+        console.error('Error fetching event data:', response.statusText);
+      } catch (error) {
+        console.error('Error fetching event data:', error.message);
+      }
+    };
+
+    fetchEvents();
+  }, [id]);
+
  
+
   const handleOpen = () => setOpen(!open);
+
+  const startDate = new Date(data.eventStart).toLocaleDateString('en-US', {
+    day: 'numeric',
+    month: 'short',
+    hour: 'numeric',
+    minute: 'numeric',
+    // second: 'numeric', // Optionally include seconds
+});
+
+const endDate = new Date(data.eventEnd).toLocaleDateString('en-US', {
+    day: 'numeric',
+    month: 'short',
+    hour: 'numeric',
+    minute: 'numeric',
+    // second: 'numeric', // Optionally include seconds
+});
+
+const speakerIds = Array.isArray(data.speakers) ? data.speakers.map(speaker => speaker.id) : [];
+
+console.log(speakerIds)
+
+
   return (
     <div>
-      <Dialog open={open} handler={handleOpen}>
+      {/* <Dialog open={open} handler={handleOpen}>
           <div className="flex flex-col items-center">
             <DialogHeader className="text-center">SpeakerName</DialogHeader>
             <Avatar src="https://docs.material-tailwind.com/img/face-2.jpg" alt="avatar" size="xxl" />
@@ -23,8 +87,8 @@ export default function EventDetails() {
               <span>Close</span>
             </Button>
           </DialogFooter>
-        </Dialog>
-      
+        </Dialog> */}
+
       <div className="grid grid-cols-4">
         <div className="max-w-[900px]  col-span-3">
           <div className=" w-full bg-gray-200 rounded-xl p-4 flex flex-col flex-wrap">
@@ -33,7 +97,7 @@ export default function EventDetails() {
                 variant="ghost"
                 color="green"
                 size="sm"
-                value="Online"
+                value={data.paymentStatus}
                 icon={
                   <span className="mx-auto mt-1 block h-2 w-2 rounded-full bg-green-900 content-['']" />
                 }
@@ -42,26 +106,27 @@ export default function EventDetails() {
                 variant="ghost"
                 color="green"
                 size="sm"
-                value="Paid"
-                icon={
-                  <span className="mx-auto mt-1 block h-2 w-2 rounded-full bg-green-900 content-['']" />
-                }
-              />
-              <Chip
-                variant="ghost"
-                color="green"
-                size="sm"
-                value="Seminar"
+                value={data.eventType}
                 icon={
                   <span className="mx-auto mt-1 block h-2 w-2 rounded-full bg-green-900 content-['']" />
                 }
               />
             </div>
-            <h1 className="text-3xl text-black font-bold">
-              Conference on the Importance of Blockchain Technology
-            </h1>
+            <h1 className="text-3xl text-black font-bold">{data.eventName}</h1>
             <div className="flex justify-start gap-2" onClick={handleOpen}>
-              <p className="">By</p> <p className="cursor-pointer underline font-bold font-sans text-blue-900" href="" >Blockchain Team</p>
+              <p className="">By</p>{' '}
+              <p
+                className="cursor-pointer underline font-bold font-sans text-blue-900"
+                href=""
+              >
+                {data.createdBy ? (
+                  <span>{data.createdBy}</span>
+                ) : data.organizer ? (
+                  <span>{data.organizer}</span>
+                ) : (
+                  <span>No creator information available</span>
+                )}
+              </p>
             </div>
             <div className="flex justify-start items-center gap-x-1 mt-1">
               <svg
@@ -77,7 +142,7 @@ export default function EventDetails() {
                 />
               </svg>
               <p className="text-xl p-2">
-                Wednesday, 03 January, 2024 to Friday, 05 January, 2024
+                {startDate} to {endDate}
               </p>
             </div>
             <div className="flex justify-start items-center gap-x-1 mt-1">
@@ -93,7 +158,7 @@ export default function EventDetails() {
                   clipRule="evenodd"
                 />
               </svg>
-              <p className="text-xl p-2">IUBAT, Dhaka</p>
+              <p className="text-xl p-2">{data.eventVenue}</p>
             </div>
             <div className="flex justify-start items-center gap-x-1 mt-1">
               <svg
@@ -109,14 +174,13 @@ export default function EventDetails() {
                 />
               </svg>
               <p className="text-xl p-2">
-                <span>13</span> Going
+                <span>{data.eventVacancy}</span> Seats
               </p>
             </div>
             <div className="flex justify-start">
               <div className="flex justify-start items-star gap-x-1 mt-1">
-      
-              <div className="mt-[10px]">
-                <svg
+                <div className="mt-[10px]">
+                  <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
                     fill="currentColor"
@@ -128,33 +192,29 @@ export default function EventDetails() {
                       clipRule="evenodd"
                     />
                   </svg>
+                </div>
+                <p className="text-xl p-2">Speakers:</p>
               </div>
-                <p className="text-xl p-2">
-              Speakers:</p>
-      
+              <div className="flex flow-col justify-start">
+                <SpeakerList speakerIds={speakerIds} />
               </div>
-              <div className="flex flow-col justify-start"><SpeakerList/></div>
             </div>
           </div>
           <div className=" w-full rounded-xl mt-3">
-            <h1 className="text-3xl font-bold">Event Details</h1>
-            <p className="text-xl">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis eaque
-              nisi itaque dolorum, ipsam consequuntur quia eius pariatur vitae
-              accusamus voluptates molestiae tempora ullam amet modi dolore sint,
-              dignissimos consequatur voluptatum quibusdam minima quasi at illo
-              aliquid. Provident harum odit, accusantium consectetur praesentium,
-              sit dolorum ipsa sequi nihil ducimus, rem quasi a numquam laboriosam
-              adipisci id dolores qui! Quia earum, iusto ad unde quidem itaque
-              modi cupiditate? Maxime consectetur porro quod voluptate, officia
-              fugit, neque eveniet eius nisi sequi veniam? Deserunt nisi qui
-              deleniti adipisci, quasi quibusdam fugiat aliquam consectetur
-              aspernatur sit nulla quae? Non minus dolorem culpa dolores earum?
-            </p>
+            <h1 className="text-3xl font-bold ">Event Details</h1>
+            <hr className=' mb-5' />
+            <p className="text-xl">{data.eventDetails}</p>
+           
           </div>
         </div>
         <div className="col-span-1">
-          <PricingCard />
+          <PricingCard
+            eventBannerUrl={data.eventBannerUrl}
+            paymentAmount={data.paymentAmount}
+            paymentStatus={data.paymentStatus}
+            eventStart={data.eventStart}
+            eventId={data._id}
+          />
         </div>
       </div>
     </div>
