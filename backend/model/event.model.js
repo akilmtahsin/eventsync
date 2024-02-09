@@ -2,9 +2,7 @@ const mongoose = require("mongoose");
 
 
 const speakerSchema = new mongoose.Schema({
-  id: {type: String},
-  name: { type: String},
-  designation: { type: String},
+  id: {type: String}
 });
 
 const eventSchema = mongoose.Schema({
@@ -43,12 +41,22 @@ const eventSchema = mongoose.Schema({
   },
   eventVenue: {
     type: String,
-    required: true,
+    required: function () {
+      return this.eventType === "seminar";
+    },
+  },
+  eventLink: {
+    type: String,
+    required: function () {
+      return this.eventType === "webinar";
+    },
   },
   
   eventVacancy: {
     type: Number,
-    required: true,
+    required: function () {
+      return this.eventType === "seminar";
+    },
   },
   status: {
     type: String,

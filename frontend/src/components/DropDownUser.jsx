@@ -46,10 +46,22 @@ const DropdownUser = () => {
     fetchUserProfile();
   }, [token]);
 
+  let linkTo;
+  if (role === 'admin') {
+    linkTo = '/dashboard/admin';
+  } else if (role === 'organizer') {
+    linkTo = '/dashboard/org';
+  } else if (role === 'user') {
+    linkTo = '/dashboard/user';
+  } else {
+    // Default link if role is not recognized
+    linkTo = '/dashboard';
+  }
+
 
   const handleLogout = async () => {
     try {
-      await cookies.remove('user_token');
+      await cookies.remove ('user_token');
       toast.success('Logged out successfully.');
       window.location.reload(true);
     } catch (error) {
@@ -137,7 +149,7 @@ const DropdownUser = () => {
         <ul className="flex flex-col gap-5 border-b border-stroke px-6 py-7.5 dark:border-strokedark">
           <li>
             <Link
-              to="/dashboard"
+              to={linkTo}
               className="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base my-2"
             >
               <svg

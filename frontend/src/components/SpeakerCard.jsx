@@ -1,9 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Card,
   CardHeader,
   CardBody,
-  CardFooter,
   Typography,
   Dialog,
   DialogBody,
@@ -14,6 +13,7 @@ import {
 } from '@material-tailwind/react';
 
 const SpeakerCard = ({
+  id,
   imageUrl,
   name,
   designation,
@@ -23,6 +23,59 @@ const SpeakerCard = ({
 }) => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(!open);
+  const [data, setData] = useState([]);
+  const [latestEvents, setLatestEvents] = useState([]);
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:8000/api/admin/get-speakerevent/${id}`,
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          setData(data);
+
+          const currentDate = new Date();
+
+          const eventsWithDifference = data
+            .filter((event) => event.status !== 'pending')
+            .map((event) => {
+              const eventDate = new Date(event.eventStart);
+              const differenceInMilliseconds = Math.abs(
+                eventDate - currentDate
+              );
+              return { ...event, differenceInMilliseconds };
+            });
+
+          // Sorting events by the calculated difference in ascending order
+          const sortedEvents = eventsWithDifference.sort(
+            (a, b) => a.differenceInMilliseconds - b.differenceInMilliseconds
+          );
+
+          setLatestEvents(sortedEvents);
+        }
+        console.error('Error fetching event data:', response.statusText);
+      } catch (error) {
+        console.error('Error fetching event data:', error.message);
+      }
+    };
+
+    fetchEvents();
+  }, []);
+
+  const formatDate = (dateString) => {
+    const options = { month: 'long', day: 'numeric' };
+    const formattedDate = new Date(dateString).toLocaleDateString(undefined, options);
+    return formattedDate;
+  };
 
   return (
     <div>
@@ -41,36 +94,40 @@ const SpeakerCard = ({
             {designation}
           </Typography>
         </CardBody>
-        <CardFooter className="flex justify-center gap-7 pt-2">
-          <Typography variant="h6" color="blue-gray" className="font-medium">
-            Rated
-          </Typography>
-          <Typography
-            color="blue-gray"
-            className="flex items-center gap-1.5 font-normal"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              className="-mt-0.5 h-5 w-5 text-yellow-700"
-            >
-              <path
-                fillRule="evenodd"
-                d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                clipRule="evenodd"
-              />
-            </svg>
-            {rating} ({numberOfRatings})
-          </Typography>
-        </CardFooter>
+        
+        
       </Card>
       <Dialog open={open} handler={handleOpen}>
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center ng-col">
           <DialogHeader className="text-center">{name}</DialogHeader>
           <Avatar src={imageUrl} alt="avatar" size="xxl" />
         </div>
-        <DialogBody>{details}</DialogBody>
+        <DialogBody>
+  <div>
+    <p>{details}</p>
+    <div>
+      <h1 className='text-bold text-black mt-2'>Upcoming Events</h1>
+      <div>
+        {/* Map and render the list of upcoming events */}
+        {latestEvents.length > 0 ? (
+          latestEvents.map((event) => (
+            <div key={event._id} className="event-item">
+              {/* Render event details as needed */}
+              <h2>{event.eventName}</h2>
+              <p>{formatDate(event.eventStart)}</p>
+              <hr />
+            </div>
+          ))
+        ) : (
+          <div>
+            <p>No upcoming events</p>
+          </div>
+        )}
+      </div>
+    </div>
+  </div>
+</DialogBody>
+
         <DialogFooter>
           <Button variant="gradient" color="green" onClick={handleOpen}>
             <span>Close</span>

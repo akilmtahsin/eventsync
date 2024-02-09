@@ -25,11 +25,15 @@ export default function Events() {
 
           const currentDate = new Date();
 
-          const eventsWithDifference = data.map((event) => {
-            const eventDate = new Date(event.eventStart);
-            const differenceInMilliseconds = Math.abs(eventDate - currentDate);
-            return { ...event, differenceInMilliseconds };
-          });
+          const eventsWithDifference = data
+            .filter((event) => event.status !== 'pending')
+            .map((event) => {
+              const eventDate = new Date(event.eventStart);
+              const differenceInMilliseconds = Math.abs(
+                eventDate - currentDate
+              );
+              return { ...event, differenceInMilliseconds };
+            });
 
           // Sorting events by the calculated difference in ascending order
           const sortedEvents = eventsWithDifference.sort(
@@ -75,7 +79,6 @@ export default function Events() {
           />
         </div>
       </div>
-      
 
       <div className="grid grid-cols-3 gap-5 mb-16">
         {filteredEvents.map((event) => (

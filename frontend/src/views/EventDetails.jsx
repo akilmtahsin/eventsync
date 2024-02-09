@@ -69,7 +69,7 @@ const endDate = new Date(data.eventEnd).toLocaleDateString('en-US', {
 
 const speakerIds = Array.isArray(data.speakers) ? data.speakers.map(speaker => speaker.id) : [];
 
-console.log(speakerIds)
+
 
 
   return (

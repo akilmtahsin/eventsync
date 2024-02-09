@@ -40,13 +40,15 @@ const createSpeaker = async (req, res) => {
       return res.status(400).json({ message: "Speaker already exist" });
     }
 
+    defaultImageUrl= "Images/dp.jpg";
+
     const organizer = await User.findOne({_id: organizerId});
 
     const newSpeaker = Speaker({
       name: name,
       designation: designation,
       details: details,
-      imageUrl: imageUrl,
+      imageUrl: imageUrl || defaultImageUrl,
       createdBy: organizerId,
       organizerName: organizer.username
     });

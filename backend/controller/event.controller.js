@@ -9,6 +9,7 @@ const createEvent = async (req, res) => {
       paymentStatus,
       paymentAmount,
       eventVenue,
+      eventLink,
       eventVacancy,
       eventStart,
       eventEnd,
@@ -47,6 +48,7 @@ const createEvent = async (req, res) => {
       paymentStatus,
       paymentAmount,
       eventVenue,
+      eventLink,
       eventVacancy,
       eventStart,
       eventEnd,
@@ -68,11 +70,13 @@ const findEventById = async (req, res) => {
   try {
     const event = await Event.find({ _id: req.params.id });
 
-    res.status(200).json(organizers);
+    res.status(200).json(event);
   } catch (error) {
     res.status(500).send(error.message);
   }
 };
+
+
 module.exports = {
   createEvent,
   findEventById

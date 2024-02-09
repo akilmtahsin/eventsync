@@ -105,12 +105,13 @@ const handlePrint = () => {
       </div>
       <dvi>
         {ticketDetails ? (
-          <div id="ticketDetails" className='h-[20rem] w-[60rem] bg-blue-100 p-8 rounded-xl'>
+          <div id="ticketDetails" className='h-[24rem] w-[60rem] bg-blue-100 p-8 rounded-xl'>
             <h2 className='text-3xl text-center mb-7'>Ticket Details</h2>
             <p className='text-lg font-mono mt-2'>Ticket ID: <span className='font-bold font-sans'>{ticketDetails._id}</span></p>
             <p className='text-lg font-mono  mt-2' >Event: <span className='font-bold font-sans' >{ticketDetails.eventName}</span></p>
             <p className='text-lg font-mono  mt-2' >Event Date and Time:  <span className='font-bold font-sans' >{startDate}</span></p>
             <p className='text-lg font-mono  mt-2' >Event Venue: <span className='font-bold font-sans' >{ticketDetails.eventVenue}</span></p>
+            <p className='text-lg font-mono  mt-2' >Event Link: <span className='font-bold font-sans' >{ticketDetails.eventLink}</span></p>
             <p className='text-lg font-mono  mt-2' >Ticket Price: <span className='font-bold font-sans' >{ticketDetails.ticketPrice}</span></p>
             <p className='text-lg font-mono  mt-2 mb-4 inline'  >The ticket is electronically generated for: </p>
 

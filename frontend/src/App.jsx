@@ -40,6 +40,7 @@ import CheckoutPage from './views/Checkoutpage';
 import SpeakerRegistration from './views/Organizer/SpeakerRegistration';
 import AuthGuard from './Authentication/AuthGuard';
 import ViewTickets from './views/User/ViewTickets';
+import PaymentProcessing from './components/PaymentProcessing';
 // import DashboardRoute from './Routes/DashboardRoute';
 
 // const DashboardRoute = ({ element, userRole, allowedRoles }) => {
@@ -127,6 +128,7 @@ function App() {
         containerClassName="overflow-auto"
       />
       <Routes>
+      <Route path="/payment-processing" element={<PaymentProcessing />} />
       <Route
           path="/auth/*"
           element={
@@ -146,7 +148,7 @@ function App() {
             </DashboardLayout>
           }
         >
-          <Route path="/dashboard/" element={<AdminDashboard />} />
+          <Route path="/dashboard/admin" element={<UserProfile />} />
           <Route path="/dashboard/users" element={<ViewAllUser />} />
           <Route path="/dashboard/organizers" element={<ViewAllOrganizers />} />
           <Route path="/dashboard/speakers" element={<ViewAllSpeakers />} />
@@ -164,7 +166,7 @@ function App() {
             path="/dashboard/events/rejected"
             element={<ViewAllRejected />}
           />
-          <Route path="/dashboard/organizer" element={<OrganizerDashboard />} />
+          <Route path="/dashboard/org" element={<UserProfile />} />
           <Route
             path="/dashboard/organizer/speakers"
             element={<CreatedSpeakers />}
@@ -197,7 +199,7 @@ function App() {
             path="/dashboard/organizer/events/create"
             element={<EventCreationForm />}
           />
-          <Route path="/dashboard/user/profile" element={<UserProfile />} />
+          <Route path="/dashboard/user" element={<UserProfile />} />
           <Route path="/dashboard/user/payments" element={<UserPayments />} />
           <Route path="/dashboard/user/events" element={<EnrolledEvent />} />
           <Route

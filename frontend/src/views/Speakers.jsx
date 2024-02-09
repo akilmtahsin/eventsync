@@ -66,6 +66,7 @@ export default function Speakers() {
         {filteredSpeakers.map((speaker) => (
           <SpeakerCard
             key={speaker._id}
+            id={speaker._id}
             name={speaker.name}
             designation={speaker.designation}
             details={speaker.details}

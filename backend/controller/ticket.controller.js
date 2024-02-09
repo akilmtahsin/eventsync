@@ -114,6 +114,7 @@ const viewTicketById = async (req, res) => {
       registeredUsers: populatedUsers,
       eventDate: ticket.event.eventStart,
       eventVenue: ticket.event.eventVenue,
+      eventLink: ticket.event.eventLink,
       ticketPrice: ticket.price,
     };
 
@@ -124,7 +125,41 @@ const viewTicketById = async (req, res) => {
   }
 };
 
+const findEventById = async (req, res) => {
+  try {
+    const event = await Event.find({ _id: req.params.id });
+
+    res.status(200).json(event);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+};
+
+const findEventIdByUserId = async (req, res) => {
+  const userId = req.userId;
+
+  try {
+    const ticket = await Ticket.findOne({
+      'registeredUsers': { $in: [userId] },
+    });
+
+    if (!ticket) {
+      return res.status(404).json({ error: 'No tickets found for the given user' });
+    }
+
+    const eventId = ticket.event;
+
+    res.status(200).json({ eventId });
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+};
+
+
+
+
 module.exports = {
   viewTicketById,
   registerForEvent,
+  findEventIdByUserId,
 };

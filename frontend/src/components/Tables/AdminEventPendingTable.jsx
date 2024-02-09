@@ -1,11 +1,91 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Chip } from '@material-tailwind/react';
+import toast from 'react-hot-toast';
 
 export function AdminEventPending() {
-  const [paymentStatus, setPaymentStatus] = useState('unpaid');
-  const [paymentAmount, setPaymentAmount] = useState('100');
-  const [status, setStatus] = useState('pending');
-  const [rating, setRating] = useState('4');
+  const [events, setEvents] = useState([]);
+
+  const handleApprove = async (eventId) => {
+    try {
+      const response = await fetch(
+        `http://localhost:8000/api/admin/approve-event/${eventId}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      if (response.ok) {
+        
+        toast.success('Approved event');
+  
+        
+      } else {
+        console.error('Error approving event:', response.statusText);
+        toast.error('Error approving event');
+      }
+    } catch (error) {
+      console.error('Error approving event:', error.message);
+    }
+  };
+  const handleReject = async (eventId) => {
+    try {
+      const response = await fetch(
+        `http://localhost:8000/api/admin/reject-event/${eventId}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      if (response.ok) {
+        
+        toast.success('Rejected Event');
+  
+        
+      } else {
+        console.error('Error rejecting event:', response.statusText);
+        toast.error('Error rejecting event');
+      }
+    } catch (error) {
+      console.error('Error rejecting event:', error.message);
+    }
+  };
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const response = await fetch(
+          'http://localhost:8000/api/admin/get-all-event',
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
+        );
+
+        if (response.ok) {
+          const eventData = await response.json();
+          // Filter events with status "pending"
+          const pendingEvents = eventData.filter(
+            (event) => event.status === 'pending'
+          );
+          setEvents(pendingEvents);
+        } else {
+          console.error('Error fetching event data:', response.statusText);
+        }
+      } catch (error) {
+        console.error('Error fetching event data:', error.message);
+      }
+    };
+
+    fetchEvents();
+  }, []);
 
   return (
     <div className="flex flex-col">
@@ -34,9 +114,6 @@ export function AdminEventPending() {
                     <th scope="col" className="px-6 py-4">
                       Organized By
                     </th>
-                    <th scope="col" className="px-6 py-4">
-                      Speakers
-                    </th>
 
                     <th scope="col" className="px-6 py-4">
                       Payment
@@ -51,76 +128,75 @@ export function AdminEventPending() {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr className="border-b dark:border-neutral-500">
-                    <td className="whitespace-nowrap px-6 py-4 font-medium">
-                      1
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4">id</td>
-                    <td className="whitespace-nowrap px-6 py-4">Name</td>
-                    <td className="whitespace-wrap px-6 py-4">
-                      <div className="w-60 text-justify">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                        Nemo cum voluptates autem, illo quaerat mollitia et
-                        impedit quas minima repellendus ab accusamus?
-                      </div>
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4">Seminar</td>
-                    <td className="whitespace-nowrap px-6 py-4">Organizer</td>
-                    <td className="whitespace-nowrap px-6 py-4">
-                      <div>
-                        <ul>
-                          <li className="list-disc">Speaker 1</li>
-                          <li className="list-disc">Speker 2</li>
-                        </ul>
-                      </div>
-                    </td>
+                  {events.map((event, index) => (
+                    <tr
+                      className="border-b dark:border-neutral-500"
+                      key={index}
+                    >
+                      <td className="whitespace-nowrap px-6 py-4 font-medium">
+                        {index + 1}
+                      </td>
 
-                    <td className="whitespace-nowrap px-6 py-4">
-                      <div className="max-w-full flex justify-center">
-                        {paymentStatus === 'paid' && (
-                          <Chip
-                            color="orange"
-                            value={`${paymentAmount} Taka`}
-                          />
+                      <td className="whitespace-nowrap px-6 py-4">
+                        {event.eventId}
+                      </td>
+                      <td className="whitespace-nowrap px-6 py-4">
+                        {event.eventName}
+                      </td>
+                      <td className="whitespace-wrap px-6 py-4">
+                        <div className="w-60 text-justify">
+                          {event.eventDetails}
+                        </div>
+                      </td>
+                      <td className="whitespace-nowrap px-6 py-4">
+                        {event.eventType}
+                      </td>
+                      <td className="whitespace-nowrap px-6 py-4">
+                        {event.createdBy}
+                      </td>
+
+                      <td className="whitespace-nowrap px-6 py-4">
+                        <div className="max-w-full flex justify-center">
+                          {event.paymentStatus === 'paid' && (
+                            <Chip
+                              color="orange"
+                              value={`${event.paymentAmount} Taka`}
+                            />
+                          )}
+                          {event.paymentStatus === 'unpaid' && (
+                            <Chip color="amber" value="Unpaid" />
+                          )}
+                        </div>
+                      </td>
+
+                      <td className="whitespace-nowrap px-6 py-4">
+                        {event.status === 'pending' && (
+                          <Chip color="amber" value="Pending" />
                         )}
-                        {paymentStatus === 'unpaid' && (
-                          <Chip color="amber" value="Unpaid" />
-                        )}
-                      </div>
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4">
-                      <div className="max-w-full flex justify-center">
-                        <Chip color="amber" value="Pending" />
-                      </div>
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4">
-                      {status === 'pending' || status === 'rejected' ? (
-                        <Chip
-                          variant="ghost"
-                          value="Not Available"
-                          className="rounded-full"
-                        />
-                      ) : (
-                        <Chip value="4.7" className="rounded-full" />
-                      )}
-                    </td>
-
-                    <td className="whitespace-nowrap px-6 py-4">
-                      <div className=" max-w-full flex justify-center">
-                      <button className="flex gap-x-2 justify-between items-center mr-3 bg-green-500 hover:bg-opacity-90 rounded-full p-3 text-white">
-                         
-
-                         <p>Approve</p>
-                       </button>
-                        <button className="flex gap-x-2 justify-between items-center mr-3 bg-red-500 hover:bg-opacity-90 rounded-full p-3 text-white">
+                      </td>
+                      <td className="whitespace-nowrap px-6 py-4">
+                        <div className="max-w-full flex justify-center">
+                          <Chip color="amber" value={event.rating} />
+                        </div>
+                      </td>
+                      <td className="whitespace-nowrap px-6 py-4">
+                        <div className=" max-w-full flex justify-center">
+                          <button
+                            className="flex gap-x-2 justify-between items-center mr-3 bg-green-500 hover:bg-opacity-90 rounded-full p-3 text-white"
+                            onClick={() => handleApprove(event._id)}
+                          >
+                            <p>Approve</p>
+                          </button>
+                          <button className="flex gap-x-2 justify-between items-center mr-3 bg-red-500 hover:bg-opacity-90 rounded-full p-3 text-white"
+                          onClick={() => handleReject(event._id)}
+                          >
                           
-
-                          <p>Delete</p>
-                        </button>
-                        
-                      </div>
-                    </td>
-                  </tr>
+                            <p>Reject</p>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>

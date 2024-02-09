@@ -1,13 +1,90 @@
-import React, { useEffect, useState } from 'react';
-import { SpeakerEditDialog } from '../Dialogs/SpeakerEditDialog';
+import  { useEffect, useState } from 'react';
 import { cookies } from '../../../config/cookies';
+import toast from 'react-hot-toast';
+import Modal from 'react-modal';
 
 export function OrganizerSpeakerList() {
-  const [openEdit, setOpenEdit] = React.useState(false);
+  const [editedSpeakerId, setEditedSpeakerId] = useState(null);
+  const [editedSpeakerName, setEditedSpeakerName] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleEditSpeaker = (speakerId, speakerName) => {
+    setEditedSpeakerId(speakerId);
+    setEditedSpeakerName(speakerName);
+    openModal();
+  };
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setEditedSpeakerId(null);
+    setEditedSpeakerName('');
+  };
+
+  const handleSave = async () => {
+    try {
+      // Make an HTTP PUT request to update the speaker
+      const response = await fetch(`http://localhost:8000/api/admin/edit-speaker/${editedSpeakerId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          editedSpeakerName: editedSpeakerName,
+          // Include other properties you want to update
+        }),
+      });
+  
+      if (response.ok) {
+        console.log('Speaker updated successfully');
+        // Optionally, you can perform additional actions after successful update
+      } else {
+        console.error('Failed to update speaker');
+        // Handle the failure, display an error message, or perform other actions
+      }
+  
+      // Close the modal after saving
+      closeModal();
+    } catch (error) {
+      console.error('Error updating speaker:', error.message);
+      // Handle the error, display an error message, or perform other actions
+    }
+  };
+
 
   const [data, setData] = useState([]);
 
   const token = cookies.get('user_token');
+
+  const handleDeleteSpeaker = async (speakerId) => {
+    try {
+      const response = await fetch(
+        `http://localhost:8000/api/admin/delete-speaker/${speakerId}`,
+        {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      if (response.ok) {
+        
+        toast.success('Deleted Speaker');
+  
+        
+      } else {
+        console.error('Error deleting speaker:', response.statusText);
+        toast.error('Error deleting speaker');
+      }
+    } catch (error) {
+      console.error('Error deleting speaker:', error.message);
+    }
+  };
+
 
   useEffect(() => {
     const fetchSpeakers = async () => {
@@ -35,11 +112,20 @@ export function OrganizerSpeakerList() {
     fetchSpeakers();
   }, []);
 
-  const handleSpeakerEdit = () => setOpenEdit(!openEdit);
+  
 
   return (
     <div className="flex flex-col">
-      {openEdit && <SpeakerEditDialog open={open} handler={handleSpeakerEdit} />}
+       <Modal isOpen={isModalOpen} onRequestClose={closeModal}>
+        <h2>Edit Speaker Name</h2>
+        <input
+          type="text"
+          value={editedSpeakerName}
+          onChange={(e) => setEditedSpeakerName(e.target.value)}
+        />
+        <button onClick={handleSave}>Save</button>
+        <button onClick={closeModal}>Cancel</button>
+      </Modal>
       <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
           <div className="overflow-hidden">
@@ -88,8 +174,9 @@ export function OrganizerSpeakerList() {
                     <td className="whitespace-nowrap px-6 py-4">
                       <div className=" max-w-full flex justify-center">
                         <button
-                          onClick={handleSpeakerEdit}
+                         
                           className="flex gap-x-1 justify-between items-center mr-3 bg-green-800 hover:bg-opacity-90 rounded-full p-2 text-white"
+                          onClick={() => handleEditSpeaker(speaker._id)}
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -109,7 +196,9 @@ export function OrganizerSpeakerList() {
                           <p>Edit</p>
                         </button>
 
-                        <div className="flex gap-x-2 justify-between items-center mr-3 bg-red-500 hover:bg-opacity-90 rounded-full p-2 text-white">
+                        <div className="flex gap-x-2 justify-between items-center mr-3 bg-red-500 hover:bg-opacity-90 rounded-full p-2 text-white"
+                        onClick={() => handleDeleteSpeaker(speaker._id)}
+                        >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"

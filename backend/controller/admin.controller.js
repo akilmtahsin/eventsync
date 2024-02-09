@@ -85,6 +85,120 @@ const findEventById = async (req, res) => {
   }
 };
 
+const findEventBySpeakerId = async (req, res) => {
+  try {
+    const events = await Event.find({
+      'speakers.id': req.params.speakerId
+    });
+
+    res.status(200).json(events);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+};
+
+const approveEventById = async (req, res) => {
+  const { _id } = req.params;
+
+  try {
+    // Find the event by ID and update its status to "approved"
+    const updatedEvent = await Event.findByIdAndUpdate(
+      _id,
+      { $set: { status: 'approved' } },
+      { new: true } // Returns the modified document
+    );
+
+    if (!updatedEvent) {
+      return res.status(404).json({ message: 'Event not found' });
+    }
+
+    res.status(200).json(updatedEvent);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+};
+
+const rejectEventById = async (req, res) => {
+  const { _id } = req.params;
+
+  try {
+    // Find the event by ID and update its status to "approved"
+    const updatedEvent = await Event.findByIdAndUpdate(
+      _id,
+      { $set: { status: 'rejected' } },
+      { new: true } // Returns the modified document
+    );
+
+    if (!updatedEvent) {
+      return res.status(404).json({ message: 'Event not found' });
+    }
+
+    res.status(200).json(updatedEvent);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+};
+
+const deleteEventById = async (req, res) => {
+  const { _id } = req.params;
+
+  try {
+    
+    const deletedEvent = await Event.findByIdAndDelete(_id);
+
+    if (!deletedEvent) {
+      return res.status(404).json({ message: 'Event not found' });
+    }
+
+    res.status(200).json({ message: 'Event deleted successfully' });
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+};
+
+const deleteSpeakerById = async (req, res) => {
+  const { _id } = req.params;
+
+  try {
+    
+    const deletedSpeaker = await Speaker.findByIdAndDelete(_id);
+
+    if (!deletedSpeaker) {
+      return res.status(404).json({ message: 'Speaker not found' });
+    }
+
+    res.status(200).json({ message: 'Speaker deleted successfully' });
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+};
+
+const editSpeakerById = async (req, res) => {
+  const { speakerId } = req.params;
+  const { editedSpeakerName } = req.body; // Assuming the edited data is sent in the request body
+
+  try {
+    // Find the speaker by ID
+    const speaker = await Speaker.findById(speakerId);
+
+    if (!speaker) {
+      return res.status(404).json({ message: 'Speaker not found' });
+    }
+
+    // Update the speaker's name
+    speaker.name = editedSpeakerName;
+
+    // Save the changes
+    const updatedSpeaker = await speaker.save();
+
+    res.status(200).json(updatedSpeaker);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+};
+
+
+
 
 //exporting the CRUD
 module.exports = {
@@ -95,4 +209,10 @@ module.exports = {
   getAllPayments,
   getAllTickets,
   findEventById,
+  findEventBySpeakerId,
+  approveEventById,
+  rejectEventById,
+  deleteEventById,
+  deleteSpeakerById,
+  editSpeakerById,
 };
